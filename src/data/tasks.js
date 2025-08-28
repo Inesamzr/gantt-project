@@ -10,7 +10,7 @@ const tasks = [
     description: "Collecte des besoins fonctionnels auprès du client.",
   },
   {
-    id: 2,
+    id: 1.1,
     name: "Spécifications techniques",
     type: "conception",
     assignedTo: "Yassine - Tech Lead",
