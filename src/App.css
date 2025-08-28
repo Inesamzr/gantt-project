@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+@theme {
+  /* Couleurs principales */
+  --color-primary-blue: #21477c;
+  --color-primary-orange: #fc6c4c;
+  --color-primary-turquoise: #12dcce;
+
+  /* Couleurs secondaires */
+  --color-secondary-green: #41bb4d;
+  --color-secondary-jaune: #f7c921;
+  --color-secondary-gray: #494e54;
+  --color-background-label: #cdfbf8;
+  --color-background-content: #ffffff;
+  --color-background-page: #dee5ec;
+
+  /* Statuts (success, error, warning) */
+  --color-success: #8dc572;
+  --color-error: #be6464;
+  --color-warning: #f0ad4e;
+
+  /* Typographie */
+  --font-title: "Red Hat Display", sans-serif;
+  --font-body: "Noto Sans", sans-serif;
+}
