@@ -1,4 +1,5 @@
 import "./App.css";
+import GanttChart from "./components/GanttChart";
 
 function App() {
   return (
@@ -7,13 +8,15 @@ function App() {
         <img src="/logo.svg" alt="Clayverest" className="h-10" />
       </header>
 
-      <main className="flex-1 px-8 py-4"></main>
+      <main className="relative z-10 flex-1 px-8 py-4">
+        <GanttChart />
+      </main>
 
       <footer className="relative w-full">
         <img
           src="/Everest_Gris.svg"
           alt="Montagne"
-          className="absolute bottom-0 left-0 w-full object-cover opacity-50"
+          className="absolute bottom-0 left-0 w-full object-cover opacity-50 z-0"
         />
       </footer>
     </div>
