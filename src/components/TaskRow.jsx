@@ -73,22 +73,39 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
 
       <div className="w-[80px] h-8 flex items-center justify-center ml-[4px]">
         {task.status === "terminée" && (
-          <div className="w-[40px] h-8 bg-[#D1F3C4] flex items-center justify-center rounded-r">
-            <Icon icon="el:ok-circle" className="text-green-600" width="20" />
+          <div
+            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            style={{ backgroundColor: "var(--status-bg-success)" }}
+          >
+            <Icon
+              icon="el:ok-circle"
+              className="text-[var(--status-primary-success)]"
+              width="20"
+            />
           </div>
         )}
         {task.status === "en cours" && (
-          <div className="w-[40px] h-8 bg-[#FFCAAD] flex items-center justify-center rounded-r">
+          <div
+            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            style={{ backgroundColor: "var(--status-bg-progress)" }}
+          >
             <Icon
               icon="mdi:progress-check"
-              className="text-red-500"
+              className="text-[var(--status-primary-progress)]"
               width="24"
             />
           </div>
         )}
         {task.status === "à faire" && (
-          <div className="w-[40px] h-8 bg-gray-100 flex items-center justify-center rounded-r">
-            <Icon icon="tdesign:time" className="text-gray-500" width="20" />
+          <div
+            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            style={{ backgroundColor: "var(--status-bg-todo)" }}
+          >
+            <Icon
+              icon="tdesign:time"
+              className="text-[var(--status-primary-todo)]"
+              width="20"
+            />
           </div>
         )}
       </div>

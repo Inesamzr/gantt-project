@@ -19,6 +19,14 @@
   --color-error: #be6464;
   --color-warning: #f0ad4e;
 
+  /* Badges de status (fond clair) */
+  --status-bg-success: #d1f3c4;
+  --status-bg-progress: #ffcaad;
+  --status-bg-todo: #f0f0f0;
+  --status-primary-success: #00a63e;
+  --status-primary-progress: #fb2c36;
+  --status-primary-todo: #6a7282;
+
   /* Typographie */
   --font-title: "Red Hat Display", sans-serif;
   --font-body: "Noto Sans", sans-serif;
