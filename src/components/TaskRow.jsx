@@ -62,10 +62,22 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
 
           const isInRange = current >= start && current <= end;
 
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          current.setHours(0, 0, 0, 0);
+
+          const isToday = current.getTime() === today.getTime();
+
           return (
             <div
               key={i}
-              className={`h-8 ${isInRange ? "bg-primary-orange" : "bg-white"}`}
+              className={`h-8 rounded ${
+                isToday
+                  ? "bg-background-label"
+                  : isInRange
+                  ? "bg-primary-orange"
+                  : "bg-white"
+              }`}
             ></div>
           );
         })}
