@@ -51,16 +51,46 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
       </div>
 
       <div
-        className="grid gap-[4px]"
+        className="relative grid gap-[4px]"
         style={{
           gridTemplateColumns: `repeat(${totalDays}, 40px)`,
         }}
       >
+        {(() => {
+          const offset = Math.floor(
+            (start.getTime() - ganttStart.getTime()) / (1000 * 60 * 60 * 24)
+          );
+
+          const endOffset = Math.floor(
+            (end.getTime() - ganttStart.getTime()) / (1000 * 60 * 60 * 24)
+          );
+
+          if (endOffset < 0 || offset > totalDays - 1) return null;
+
+          const visibleOffset = Math.max(0, offset);
+          const visibleDuration =
+            Math.min(endOffset, totalDays - 1) - visibleOffset + 1;
+
+          return (
+            <div
+              className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
+              style={{
+                left: `${visibleOffset * 44}px`,
+                width: `${visibleDuration * 44 - 4 - 3}px`,
+                backgroundColor: "var(--color-primary-orange)",
+                zIndex: 10,
+              }}
+              title={task.name}
+            >
+              <span className="truncate whitespace-nowrap">{task.name}</span>
+            </div>
+          );
+        })()}
+
+        {/* Fond du tableau */}
         {[...Array(totalDays)].map((_, i) => {
           const current = new Date(ganttStart);
           current.setDate(ganttStart.getDate() + i);
-
-          const isInRange = current >= start && current <= end;
 
           const today = new Date();
           today.setHours(0, 0, 0, 0);
@@ -71,13 +101,9 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
           return (
             <div
               key={i}
-              className={`h-8 rounded ${
-                isToday
-                  ? "bg-background-label"
-                  : isInRange
-                  ? "bg-primary-orange"
-                  : "bg-white"
-              }`}
+              className={`h-8 ${
+                isToday ? "bg-background-label" : "bg-white"
+              } relative`}
             ></div>
           );
         })}
