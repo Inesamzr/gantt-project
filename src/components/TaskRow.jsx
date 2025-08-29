@@ -1,9 +1,11 @@
 import { Icon } from "@iconify/react";
 
-function TaskRow({ task, totalDays, ganttStartDate }) {
+function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
   const start = new Date(task.start);
   const end = new Date(task.end);
   const ganttStart = new Date(ganttStartDate);
+  const isSubtask = Array.isArray(task.parent) && task.parent.length > 0;
+  const isSuptask = Array.isArray(task.children) && task.children.length > 0;
 
   const typeColors = {
     analyse: "var(--color-type-analyse)",
@@ -31,11 +33,30 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
           gridTemplateColumns: `40px 304px 150px 70px 80px`,
         }}
       >
-        <div className="h-8 bg-primary-blue text-white font-bold text-center rounded-l-md flex items-center justify-center">
+        <div
+          className={`h-8 flex items-center justify-center font-bold text-center ${
+            isSubtask
+              ? "text-primary-blue bg-white rounded-l-md"
+              : "bg-primary-blue text-white rounded-l-md"
+          }`}
+        >
           {task.id}
         </div>
 
-        <div className="h-8 bg-white flex items-center px-2 overflow-hidden truncate text-sm">
+        <div
+          className={`h-8 bg-white flex items-center overflow-hidden truncate text-sm
+    ${isSubtask ? "pl-10" : isSuptask ? "pl-2" : "px-2"}`}
+        >
+          {isSuptask && (
+            <button onClick={() => toggleOpen(task.id)} className="mr-1">
+              <Icon
+                icon={isOpen ? "mdi:chevron-down" : "mdi:chevron-right"}
+                className="text-primary-blue"
+                width="16"
+              />
+            </button>
+          )}
+
           {task.name}
         </div>
 
