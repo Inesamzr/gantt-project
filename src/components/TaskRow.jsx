@@ -38,6 +38,22 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
 
     return count;
   }
+  function getWorkingDays(startDate, totalDays) {
+    const days = [];
+    const current = new Date(startDate);
+
+    while (days.length < totalDays) {
+      const day = current.getDay();
+      if (day >= 1 && day <= 5) {
+        days.push(new Date(current));
+      }
+      current.setDate(current.getDate() + 1);
+    }
+
+    return days;
+  }
+
+  const workingDays = getWorkingDays(ganttStartDate, totalDays);
 
   return (
     <div className="flex">
@@ -136,15 +152,12 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
         })()}
 
         {/* Fond du tableau */}
-        {[...Array(totalDays)].map((_, i) => {
-          const current = new Date(ganttStart);
-          current.setDate(ganttStart.getDate() + i);
-
+        {workingDays.map((day, i) => {
           const today = new Date();
           today.setHours(0, 0, 0, 0);
-          current.setHours(0, 0, 0, 0);
+          day.setHours(0, 0, 0, 0);
 
-          const isToday = current.getTime() === today.getTime();
+          const isToday = day.getTime() === today.getTime();
 
           return (
             <div
