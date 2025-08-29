@@ -5,6 +5,21 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
   const end = new Date(task.end);
   const ganttStart = new Date(ganttStartDate);
 
+  const typeColors = {
+    analyse: "var(--color-type-analyse)",
+    conception: "var(--color-type-conception)",
+    dev: "var(--color-type-dev)",
+    revue: "var(--color-type-revue)",
+    intégration: "var(--color-type-intégration)",
+    test: "var(--color-type-test)",
+    correctif: "var(--color-type-correctif)",
+    recette: "var(--color-type-recette)",
+    documentation: "var(--color-type-documentation)",
+    formation: "var(--color-type-formation)",
+    livraison: "var(--color-type-livraison)",
+    maintenance: "var(--color-type-maintenance)",
+  };
+
   const duration =
     Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
@@ -77,7 +92,8 @@ function TaskRow({ task, totalDays, ganttStartDate }) {
               style={{
                 left: `${visibleOffset * 44}px`,
                 width: `${visibleDuration * 44 - 4 - 3}px`,
-                backgroundColor: "var(--color-primary-orange)",
+                backgroundColor:
+                  typeColors[task.type] || "var(--color-primary-orange)",
                 zIndex: 10,
               }}
               title={task.name}

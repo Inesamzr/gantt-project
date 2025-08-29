@@ -64,7 +64,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
             gap: "4px",
           }}
         >
-          <div className="h-8 flex-1 items-center px-2 leading-non">Nom</div>
+          <div className="h-8 flex items-center px-2 leading-non">Nom</div>
           <div className="h-8 flex items-center px-2 leading-none">
             Date début
           </div>

@@ -27,6 +27,20 @@
   --status-primary-progress: #fb2c36;
   --status-primary-todo: #6a7282;
 
+  /* Couleurs des types de tâches */
+  --color-type-analyse: #41bb4d;
+  --color-type-conception: #fc6c4c;
+  --color-type-dev: #21477c;
+  --color-type-revue: #f7c921;
+  --color-type-intégration: #12dcce;
+  --color-type-test: #6a7282;
+  --color-type-correctif: #e55854;
+  --color-type-recette: #9af7f0;
+  --color-type-documentation: #61ce70;
+  --color-type-formation: #1c7f9b;
+  --color-type-livraison: #ff6948;
+  --color-type-maintenance: #1c1b2d;
+
   /* Typographie */
   --font-title: "Red Hat Display", sans-serif;
   --font-body: "Noto Sans", sans-serif;
