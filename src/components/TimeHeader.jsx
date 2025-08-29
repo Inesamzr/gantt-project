@@ -54,13 +54,20 @@ function TimeHeader({ startDate, numberOfWeeks }) {
         {/* Case vide pour colonne ID */}
         <div className="row-span-2 bg-transparent"></div>
 
-        <div className="row-span-2 bg-primary-blue text-white px-4 rounded-t-xl flex items-center justify-center">
-          <div className="flex items-center justify-between text-xs font-medium w-full">
-            <div className="flex-1 text-start">Nom</div>
-            <span className="flex-1 text-start">Date début</span>
-            <span className="flex-1 text-center">Durée</span>
+        <div
+          className="flex items-center justify-between row-span-2 bg-primary-blue text-white font-semibold rounded-t-xl"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `300px 150px 58px 80px`,
+            gap: "4px",
+          }}
+        >
+          <div className="h-8 flex-1 items-center px-2">Nom</div>
+          <div className="h-8 flex-1 items-center px-2">Date début</div>
+          <div className="h-8 flex-1 items-center px-2">Durée</div>
+          <div className="h-8 flex-1 items-center px-2 flex justify-end pr-2">
             <button
-              className="w-6 h-6 text-white text-sm font-bold flex items-center justify-center"
+              className="w-6 h-6 font-bold flex items-center justify-center"
               title="Ajouter une tâche"
             >
               +
