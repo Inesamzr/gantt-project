@@ -1,3 +1,5 @@
+import { Icon } from "@iconify/react";
+
 function TimeHeader({ startDate, numberOfWeeks }) {
   const days = [];
   const weeks = [];
@@ -62,15 +64,17 @@ function TimeHeader({ startDate, numberOfWeeks }) {
             gap: "4px",
           }}
         >
-          <div className="h-8 flex-1 items-center px-2">Nom</div>
-          <div className="h-8 flex-1 items-center px-2">Date début</div>
-          <div className="h-8 flex-1 items-center px-2">Durée</div>
-          <div className="h-8 flex-1 items-center px-2 flex justify-end pr-2">
+          <div className="h-8 flex-1 items-center px-2 leading-non">Nom</div>
+          <div className="h-8 flex items-center px-2 leading-none">
+            Date début
+          </div>
+          <div className="h-8 flex items-center px-2 leading-none">Durée</div>
+          <div className="h-8 flex items-center justify-end pr-4">
             <button
-              className="w-6 h-6 font-bold flex items-center justify-center"
+              className="w-6 h-6 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
               title="Ajouter une tâche"
             >
-              +
+              <Icon icon="mdi:plus" width="20" />
             </button>
           </div>
         </div>
@@ -88,7 +92,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
         {days.map((day) => (
           <div
             key={day.key}
-            className="h-10 flex items-center justify-center bg-background-label text-secondary-gray font-semibold"
+            className="h-10 flex items-center justify-center rounded bg-background-label text-secondary-gray font-semibold"
           >
             {day.label}
           </div>
