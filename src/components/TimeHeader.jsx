@@ -1,15 +1,18 @@
 import { Icon } from "@iconify/react";
 
-function TimeHeader({ startDate, numberOfWeeks }) {
+function TimeHeader({ startDate, endDate }) {
   const days = [];
   const weeks = [];
-  const current = new Date(startDate);
 
-  for (let w = 0; w < numberOfWeeks; w++) {
+  const current = new Date(startDate);
+  const end = new Date(endDate);
+
+  while (current <= end) {
     const weekDays = [];
 
-    for (let d = 0; d < 7; d++) {
+    for (let d = 0; d < 7 && current <= end; d++) {
       const dayOfWeek = current.getDay(); // 1 = lundi, ..., 5 = vendredi
+
       if (dayOfWeek >= 1 && dayOfWeek <= 5) {
         weekDays.push({
           key: current.toISOString(),
@@ -19,6 +22,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
           date: new Date(current),
         });
       }
+
       current.setDate(current.getDate() + 1);
     }
 
@@ -56,6 +60,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
         {/* Case vide pour colonne ID */}
         <div className="row-span-2 bg-transparent"></div>
 
+        {/* Header: nom, date début, durée, + */}
         <div
           className="flex items-center justify-between row-span-2 bg-primary-blue text-white font-semibold rounded-t-xl"
           style={{
@@ -64,11 +69,9 @@ function TimeHeader({ startDate, numberOfWeeks }) {
             gap: "4px",
           }}
         >
-          <div className="h-8 flex items-center px-4 leading-non">Nom</div>
-          <div className="h-8 flex items-center px-2 leading-none">
-            Date début
-          </div>
-          <div className="h-8 flex items-center px-2 leading-none">Durée</div>
+          <div className="h-8 flex items-center px-4">Nom</div>
+          <div className="h-8 flex items-center px-2">Date début</div>
+          <div className="h-8 flex items-center px-2">Durée</div>
           <div className="h-8 flex items-center justify-end pr-4">
             <button
               className="w-6 h-6 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
@@ -79,6 +82,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
           </div>
         </div>
 
+        {/* Semaine */}
         {weeks.map((week, i) => (
           <div
             key={i}
@@ -89,6 +93,7 @@ function TimeHeader({ startDate, numberOfWeeks }) {
           </div>
         ))}
 
+        {/* Jours */}
         {days.map((day) => (
           <div
             key={day.key}

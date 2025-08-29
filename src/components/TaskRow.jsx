@@ -25,6 +25,20 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
   const duration =
     Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
+  function countWorkingDaysBetween(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    let count = 0;
+
+    while (start < end) {
+      const day = start.getDay();
+      if (day >= 1 && day <= 5) count++;
+      start.setDate(start.getDate() + 1);
+    }
+
+    return count;
+  }
+
   return (
     <div className="flex">
       <div
@@ -39,6 +53,7 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
               ? "text-primary-blue bg-white rounded-l-md"
               : "bg-primary-blue text-white rounded-l-md"
           }`}
+          style={{ position: "sticky", left: 0, minWidth: "40px" }}
         >
           {task.id}
         </div>
@@ -93,13 +108,9 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
         }}
       >
         {(() => {
-          const offset = Math.floor(
-            (start.getTime() - ganttStart.getTime()) / (1000 * 60 * 60 * 24)
-          );
+          const offset = countWorkingDaysBetween(ganttStart, start);
 
-          const endOffset = Math.floor(
-            (end.getTime() - ganttStart.getTime()) / (1000 * 60 * 60 * 24)
-          );
+          const endOffset = countWorkingDaysBetween(ganttStart, end);
 
           if (endOffset < 0 || offset > totalDays - 1) return null;
 
@@ -146,10 +157,13 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
         })}
       </div>
 
-      <div className="w-[80px] h-8 flex items-center justify-center ml-[4px]">
+      <div
+        className="w-[80px] h-8 flex items-center justify-center ml-[4px]"
+        style={{ position: "sticky", right: 0 }}
+      >
         {task.status === "terminée" && (
           <div
-            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            className="w-[40px] h-8 flex items-center justify-center"
             style={{ backgroundColor: "var(--status-bg-success)" }}
           >
             <Icon
@@ -161,7 +175,7 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
         )}
         {task.status === "en cours" && (
           <div
-            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            className="w-[40px] h-8 flex items-center justify-center"
             style={{ backgroundColor: "var(--status-bg-progress)" }}
           >
             <Icon
@@ -173,7 +187,7 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
         )}
         {task.status === "à faire" && (
           <div
-            className="w-[40px] h-8 flex items-center justify-center rounded-r-md"
+            className="w-[40px] h-8 flex items-center justify-center"
             style={{ backgroundColor: "var(--status-bg-todo)" }}
           >
             <Icon
