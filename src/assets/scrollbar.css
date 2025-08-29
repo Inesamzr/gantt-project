@@ -1,0 +1,19 @@
+/* styles/scrollbar.css (ou dans tailwind.css) */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-blue);
+  border-radius: 4px;
+  border: 2px solid #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-orange);
+}

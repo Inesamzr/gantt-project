@@ -34,7 +34,7 @@ function GanttChart() {
   };
 
   return (
-    <div className="overflow-x-auto text-sm">
+    <div className="overflow-x-auto text-sm custom-scrollbar">
       <div
         className="mx-auto"
         style={{

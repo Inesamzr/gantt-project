@@ -45,3 +45,18 @@
   --font-title: "Red Hat Display", sans-serif;
   --font-body: "Noto Sans", sans-serif;
 }
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary-blue);
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
+  }
+}

@@ -12,11 +12,11 @@ function App() {
         <GanttChart />
       </main>
 
-      <footer className="relative w-full">
+      <footer className="relative w-full h-0">
         <img
           src="/Everest_Gris.svg"
           alt="Montagne"
-          className="absolute bottom-0 left-0 w-full object-cover opacity-50 z-0"
+          className="fixed -bottom-40 left-0 w-full object-cover opacity-50 z-0 pointer-events-none"
         />
       </footer>
     </div>
