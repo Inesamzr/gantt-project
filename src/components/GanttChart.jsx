@@ -1,9 +1,11 @@
 import tasks from "../data/tasks";
 import TimeHeader from "./TimeHeader";
+import TaskRow from "./TaskRow";
 
 function GanttChart() {
   const numberOfWeeks = 4;
   const totalDays = numberOfWeeks * 5;
+  const ganttStartDate = "2025-08-18";
 
   return (
     <div className="overflow-x-auto text-sm">
@@ -13,30 +15,16 @@ function GanttChart() {
           maxWidth: `calc(40px + 600px + 40px * ${totalDays})`,
         }}
       >
-        <TimeHeader startDate="2025-08-18" numberOfWeeks={numberOfWeeks} />
+        <TimeHeader startDate={ganttStartDate} numberOfWeeks={numberOfWeeks} />
 
         <div className="flex flex-col gap-y-[4px]">
           {tasks.map((task) => (
-            <div
+            <TaskRow
               key={task.id}
-              className="grid items-center"
-              style={{
-                gridTemplateColumns: `40px 600px repeat(${totalDays}, 40px)`,
-                gap: "4px",
-              }}
-            >
-              <div className="h-8 bg-primary-blue text-white font-bold text-center rounded-l-md flex items-center justify-center">
-                {task.id}
-              </div>
-
-              <div className="p-2 h-8 bg-white truncate border-r border-gray-200">
-                {task.name}
-              </div>
-
-              {[...Array(totalDays)].map((_, i) => (
-                <div key={i} className="h-8 bg-white"></div>
-              ))}
-            </div>
+              task={task}
+              totalDays={totalDays}
+              ganttStartDate={ganttStartDate}
+            />
           ))}
         </div>
       </div>
