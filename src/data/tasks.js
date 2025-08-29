@@ -7,6 +7,7 @@ const tasks = [
     start: "2025-08-16",
     end: "2025-08-19",
     status: "terminée",
+    children: [1.1],
     description: "Collecte des besoins fonctionnels auprès du client.",
   },
   {
@@ -17,7 +18,7 @@ const tasks = [
     start: "2025-08-20",
     end: "2025-08-23",
     status: "terminée",
-    dependencies: [1],
+    parent: [1],
     description: "Rédaction des spécifications techniques détaillées.",
   },
   {
