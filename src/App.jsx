@@ -69,6 +69,11 @@ function App() {
           assignedToFilter={assignedToFilter}
           statusFilter={statusFilter}
           typeFilter={typeFilter}
+          onAddTask={(task) => {
+            const updated = [...taskList, task];
+            setTaskList(updated);
+            localStorage.setItem("tasks", JSON.stringify(updated));
+          }}
         />
       </main>
 

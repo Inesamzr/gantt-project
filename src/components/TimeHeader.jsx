@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import TaskModal from "./TaskModal";
 
-function TimeHeader({ startDate, endDate }) {
+function TimeHeader({ startDate, endDate, onAddTask }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const days = [];
   const weeks = [];
@@ -107,8 +107,11 @@ function TimeHeader({ startDate, endDate }) {
           </div>
         ))}
       </div>
-
-      <TaskModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={onAddTask}
+      />
     </div>
   );
 }

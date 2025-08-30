@@ -2,7 +2,13 @@ import { useState } from "react";
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow";
 
-function GanttChart({ tasks, assignedToFilter, statusFilter, typeFilter }) {
+function GanttChart({
+  tasks,
+  assignedToFilter,
+  statusFilter,
+  typeFilter,
+  onAddTask,
+}) {
   const ganttStartDate = "2025-08-16";
   const ganttEndDate = "2025-09-30";
 
@@ -61,7 +67,11 @@ function GanttChart({ tasks, assignedToFilter, statusFilter, typeFilter }) {
         }}
       >
         <div className="sticky top-0 z-30">
-          <TimeHeader startDate={ganttStartDate} endDate={ganttEndDate} />
+          <TimeHeader
+            startDate={ganttStartDate}
+            endDate={ganttEndDate}
+            onAddTask={onAddTask}
+          />{" "}
         </div>
         <div className="flex flex-col gap-y-[4px]">
           {filteredTasks.map((task) => (

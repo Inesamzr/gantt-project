@@ -4,25 +4,39 @@ import { persons, taskTypes } from "../data/tasks";
 import StatusSelect from "./StatusSelect";
 import CustomSelect from "./CustomSelect";
 
-function TaskModal({ isOpen, onClose }) {
+function TaskModal({ isOpen, onClose, onSave }) {
+  const [name, setName] = useState("");
+  const [assignedTo, setAssignedTo] = useState("");
+  const [status, setStatus] = useState("à faire");
+  const [type, setType] = useState("");
+  const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("2025-09-10");
   const [duration, setDuration] = useState(1);
 
   if (!isOpen) return null;
 
   const calculateEndDate = () => {
-    if (!startDate) return "";
     const start = new Date(startDate);
     const end = new Date(start);
     end.setDate(start.getDate() + duration - 1);
-    return end.toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    return end.toISOString().split("T")[0]; // YYYY-MM-DD
   };
 
-  const endDateLabel = calculateEndDate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newTask = {
+      id: Date.now(),
+      name,
+      assignedTo,
+      status,
+      type,
+      description,
+      start: startDate,
+      end: calculateEndDate(),
+    };
+    onSave(newTask);
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-[9999]">
@@ -35,7 +49,7 @@ function TaskModal({ isOpen, onClose }) {
               width="22"
               className="text-primary-turquoise"
             />
-            Ajout d&apos;une tache
+            Ajout d&apos;une tâche
           </h2>
           <button onClick={onClose} className="text-white hover:text-gray-200">
             <Icon icon="akar-icons:cross" width="20" />
@@ -43,7 +57,7 @@ function TaskModal({ isOpen, onClose }) {
         </div>
 
         {/* Formulaire */}
-        <form className="space-y-5 p-6">
+        <form onSubmit={handleSubmit} className="space-y-5 p-6">
           {/* Nom */}
           <div>
             <label className="block text-sm mb-1 font-bold">
@@ -51,12 +65,15 @@ function TaskModal({ isOpen, onClose }) {
             </label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
               placeholder="Nom de la tâche"
+              required
             />
           </div>
 
-          {/* Assignation + État + Type de taches */}
+          {/* Assignation + État */}
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-bold mb-1">
@@ -66,16 +83,19 @@ function TaskModal({ isOpen, onClose }) {
                 options={persons.map((p) => p.name)}
                 allowEmpty={true}
                 emptyLabel="Vide"
+                // stocker la valeur
+                onChange={setAssignedTo}
               />
             </div>
             <div>
-              <label className="block text-sm font-bold mb-1 ">
+              <label className="block text-sm font-bold mb-1">
                 État<span className="text-primary-orange">*</span>
               </label>
-              <StatusSelect />
+              <StatusSelect onChange={setStatus} />
             </div>
           </div>
 
+          {/* Type */}
           <div>
             <label className="block text-sm font-bold mb-1">
               Type de tâche
@@ -86,6 +106,7 @@ function TaskModal({ isOpen, onClose }) {
               )}
               allowEmpty={true}
               emptyLabel="Vide"
+              onChange={setType}
             />
           </div>
 
@@ -93,6 +114,8 @@ function TaskModal({ isOpen, onClose }) {
           <div>
             <label className="block text-sm font-bold mb-1">Description</label>
             <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
               rows="3"
             />
@@ -104,15 +127,15 @@ function TaskModal({ isOpen, onClose }) {
               Date de début<span className="text-primary-orange">*</span>
             </label>
             <div className="flex items-center gap-3">
-              {/* Sélecteur de date natif */}
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
+                required
               />
 
-              {/* Durée en jours */}
+              {/* Durée */}
               <div className="flex items-center gap-1">
                 <button
                   type="button"
@@ -139,21 +162,14 @@ function TaskModal({ isOpen, onClose }) {
               </div>
 
               <span className="text-gray-500 text-sm">
-                Jours ({endDateLabel})
+                Jours ({calculateEndDate()})
               </span>
             </div>
           </div>
 
-          {/* Boutons actions */}
+          {/* Actions */}
           <div className="flex justify-between gap-3 pt-4">
             <div className="flex justify-start gap-3">
-              <button
-                type="button"
-                className="flex items-center gap-1 px-3 py-2 bg-error text-white rounded hover:bg-red-600 font-semibold"
-              >
-                <Icon icon="mdi:trash" width="20" />
-                Supprimer
-              </button>
               <button
                 type="button"
                 onClick={onClose}
