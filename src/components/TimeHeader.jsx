@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Icon } from "@iconify/react";
+import TaskModal from "./TaskModal";
 
 function TimeHeader({ startDate, endDate }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const days = [];
   const weeks = [];
 
@@ -74,6 +77,7 @@ function TimeHeader({ startDate, endDate }) {
           <div className="h-8 flex items-center px-2">Durée</div>
           <div className="h-8 flex items-center justify-end pr-4">
             <button
+              onClick={() => setIsModalOpen(true)}
               className="w-6 h-6 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
               title="Ajouter une tâche"
             >
@@ -103,6 +107,8 @@ function TimeHeader({ startDate, endDate }) {
           </div>
         ))}
       </div>
+
+      <TaskModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
