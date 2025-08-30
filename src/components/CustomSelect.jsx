@@ -11,7 +11,7 @@ function CustomSelect({ options, allowEmpty = false, emptyLabel = "Vide" }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full border border-gray-300 rounded px-3 py-2 bg-white"
+        className="flex items-center justify-between w-full h-10 border border-gray-300 rounded px-3 bg-white"
       >
         <span>{selected === "" ? emptyLabel : selected}</span>
         <Icon icon="mdi:chevron-down" width="18" />
