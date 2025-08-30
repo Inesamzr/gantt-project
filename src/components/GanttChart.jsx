@@ -74,10 +74,11 @@ function GanttChart({
           />{" "}
         </div>
         <div className="flex flex-col gap-y-[4px]">
-          {filteredTasks.map((task) => (
+          {filteredTasks.map((task, index) => (
             <TaskRow
               key={task.id}
               task={task}
+              rowNumber={index + 1}
               totalDays={totalDays}
               ganttStartDate={ganttStartDate}
               isOpen={openedTasks.includes(task.id)}

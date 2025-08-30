@@ -1,6 +1,13 @@
 import { Icon } from "@iconify/react";
 
-function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
+function TaskRow({
+  task,
+  totalDays,
+  rowNumber,
+  ganttStartDate,
+  isOpen,
+  toggleOpen,
+}) {
   const start = new Date(task.start);
   const end = new Date(task.end);
   const ganttStart = new Date(ganttStartDate);
@@ -71,7 +78,7 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
           }`}
           style={{ position: "sticky", left: 0, minWidth: "40px" }}
         >
-          {task.id}
+          {!isSubtask && <p>{rowNumber}</p>}
         </div>
 
         <div
