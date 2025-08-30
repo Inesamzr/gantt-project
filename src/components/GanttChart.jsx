@@ -38,25 +38,25 @@ function GanttChart({
     );
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    // filtre par assignation
+  let filteredTasks = tasks.filter((task) => {
     if (
       assignedToFilter.length > 0 &&
       !assignedToFilter.includes(task.assignedTo)
     )
       return false;
 
-    // filtre par statut
     if (statusFilter.length > 0 && !statusFilter.includes(task.status))
       return false;
 
-    // filtre par type
     if (typeFilter.length > 0 && !typeFilter.includes(task.type)) return false;
 
-    // logique d'affichage liée aux tâches ouvertes
     if (!task.parent) return true;
     return task.parent.some((p) => openedTasks.includes(p));
   });
+
+  filteredTasks = [...filteredTasks].sort(
+    (a, b) => new Date(a.start) - new Date(b.start)
+  );
 
   return (
     <div className="overflow-x-auto text-sm custom-scrollbar">

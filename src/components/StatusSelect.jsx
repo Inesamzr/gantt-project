@@ -17,7 +17,7 @@ const statusStyles = {
   },
 };
 
-function StatusSelect() {
+function StatusSelect({ onChange }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(statuses[0]);
 
@@ -59,6 +59,7 @@ function StatusSelect() {
               onClick={() => {
                 setSelected(s);
                 setOpen(false);
+                if (onChange) onChange(s);
               }}
               className="px-3 py-2 cursor-pointer hover:bg-gray-100"
             >

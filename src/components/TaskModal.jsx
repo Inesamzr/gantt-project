@@ -7,7 +7,7 @@ import CustomSelect from "./CustomSelect";
 function TaskModal({ isOpen, onClose, onSave }) {
   const [name, setName] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
-  const [status, setStatus] = useState("à faire");
+  const [status, setStatus] = useState("");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("2025-09-10");
