@@ -1,9 +1,9 @@
 import { useState } from "react";
-import tasks from "../data/tasks";
+import { tasks } from "../data/tasks";
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow";
 
-function GanttChart() {
+function GanttChart({ assignedToFilter, statusFilter, typeFilter }) {
   const ganttStartDate = "2025-08-16";
   const ganttEndDate = "2025-09-30";
 
@@ -33,6 +33,26 @@ function GanttChart() {
     );
   };
 
+  const filteredTasks = tasks.filter((task) => {
+    // filtre par assignation
+    if (
+      assignedToFilter.length > 0 &&
+      !assignedToFilter.includes(task.assignedTo)
+    )
+      return false;
+
+    // filtre par statut
+    if (statusFilter.length > 0 && !statusFilter.includes(task.status))
+      return false;
+
+    // filtre par type
+    if (typeFilter.length > 0 && !typeFilter.includes(task.type)) return false;
+
+    // logique d'affichage liée aux tâches ouvertes
+    if (!task.parent) return true;
+    return task.parent.some((p) => openedTasks.includes(p));
+  });
+
   return (
     <div className="overflow-x-auto text-sm custom-scrollbar">
       <div
@@ -45,21 +65,16 @@ function GanttChart() {
           <TimeHeader startDate={ganttStartDate} endDate={ganttEndDate} />
         </div>
         <div className="flex flex-col gap-y-[4px]">
-          {tasks
-            .filter((task) => {
-              if (!task.parent) return true;
-              return task.parent.some((p) => openedTasks.includes(p));
-            })
-            .map((task) => (
-              <TaskRow
-                key={task.id}
-                task={task}
-                totalDays={totalDays}
-                ganttStartDate={ganttStartDate}
-                isOpen={openedTasks.includes(task.id)}
-                toggleOpen={toggleTaskOpen}
-              />
-            ))}
+          {filteredTasks.map((task) => (
+            <TaskRow
+              key={task.id}
+              task={task}
+              totalDays={totalDays}
+              ganttStartDate={ganttStartDate}
+              isOpen={openedTasks.includes(task.id)}
+              toggleOpen={toggleTaskOpen}
+            />
+          ))}
         </div>
       </div>
     </div>
