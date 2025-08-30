@@ -2,18 +2,30 @@ import { useState } from "react";
 import "./App.css";
 import GanttChart from "./components/GanttChart";
 import Dropdown from "./components/Dropdown";
-import { persons, taskTypes, statuses } from "./data/tasks";
+import { useEffect } from "react";
+import { persons, taskTypes, statuses, tasks } from "./data/tasks";
 
 function App() {
   const [assignedToFilter, setAssignedToFilter] = useState([]);
   const [statusFilter, setStatusFilter] = useState([]);
   const [typeFilter, setTypeFilter] = useState([]);
+  const [taskList, setTaskList] = useState([]);
 
   const resetFilters = () => {
     setAssignedToFilter([]);
     setStatusFilter([]);
     setTypeFilter([]);
   };
+
+  useEffect(() => {
+    const stored = localStorage.getItem("tasks");
+    if (stored) {
+      setTaskList(JSON.parse(stored));
+    } else {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      setTaskList(tasks);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-t from-primary-blue/20 to-background-page">
@@ -53,6 +65,7 @@ function App() {
         </div>
 
         <GanttChart
+          tasks={taskList}
           assignedToFilter={assignedToFilter}
           statusFilter={statusFilter}
           typeFilter={typeFilter}

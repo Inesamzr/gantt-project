@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { tasks } from "../data/tasks";
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow";
 
-function GanttChart({ assignedToFilter, statusFilter, typeFilter }) {
+function GanttChart({ tasks, assignedToFilter, statusFilter, typeFilter }) {
   const ganttStartDate = "2025-08-16";
   const ganttEndDate = "2025-09-30";
 
