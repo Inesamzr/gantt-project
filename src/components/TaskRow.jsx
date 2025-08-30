@@ -7,6 +7,7 @@ function TaskRow({
   ganttStartDate,
   isOpen,
   toggleOpen,
+  onEdit,
 }) {
   const start = new Date(task.start);
   const end = new Date(task.end);
@@ -107,7 +108,7 @@ function TaskRow({
         </div>
 
         <div className="h-8 bg-white flex items-center justify-center gap-2">
-          <button title="Modifier">
+          <button title="Modifier" onClick={() => onEdit(task)}>
             <Icon
               icon="mdi:pencil"
               width="20"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow";
+import TaskModal from "./TaskModal";
 
 function GanttChart({
   tasks,
@@ -11,24 +12,9 @@ function GanttChart({
 }) {
   const ganttStartDate = "2025-08-16";
   const ganttEndDate = "2025-09-30";
-
-  const countWorkingDays = (start, end) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    let count = 0;
-
-    while (startDate <= endDate) {
-      const day = startDate.getDay();
-      if (day >= 1 && day <= 5) count++;
-      startDate.setDate(startDate.getDate() + 1);
-    }
-
-    return count;
-  };
-
-  const totalDays = countWorkingDays(ganttStartDate, ganttEndDate);
-
   const [openedTasks, setOpenedTasks] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
   const toggleTaskOpen = (taskId) => {
     setOpenedTasks((prev) =>
@@ -36,6 +22,24 @@ function GanttChart({
         ? prev.filter((id) => id !== taskId)
         : [...prev, taskId]
     );
+  };
+
+  const openAddModal = () => {
+    setTaskToEdit(null);
+    setIsModalOpen(true);
+  };
+
+  // ouvrir en mode édition
+  const openEditModal = (task) => {
+    setTaskToEdit(task);
+    setIsModalOpen(true);
+  };
+
+  // sauvegarder une tâche (ajout ou maj)
+  const handleSaveTask = (task) => {
+    onAddTask(task); // App va gérer ajout ou update + localStorage
+    setIsModalOpen(false);
+    setTaskToEdit(null);
   };
 
   let filteredTasks = tasks.filter((task) => {
@@ -71,6 +75,22 @@ function GanttChart({
     (a, b) => new Date(a.start) - new Date(b.start)
   );
 
+  const countWorkingDays = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    let count = 0;
+
+    while (startDate <= endDate) {
+      const day = startDate.getDay();
+      if (day >= 1 && day <= 5) count++;
+      startDate.setDate(startDate.getDate() + 1);
+    }
+
+    return count;
+  };
+
+  const totalDays = countWorkingDays(ganttStartDate, ganttEndDate);
+
   return (
     <div className="overflow-x-auto text-sm custom-scrollbar">
       <div
@@ -83,8 +103,8 @@ function GanttChart({
           <TimeHeader
             startDate={ganttStartDate}
             endDate={ganttEndDate}
-            onAddTask={onAddTask}
-          />{" "}
+            onAddClick={openAddModal}
+          />
         </div>
         <div className="flex flex-col gap-y-[4px]">
           {filteredTasks.map((task, index) => (
@@ -96,10 +116,18 @@ function GanttChart({
               ganttStartDate={ganttStartDate}
               isOpen={openedTasks.includes(task.id)}
               toggleOpen={toggleTaskOpen}
+              onEdit={() => openEditModal(task)}
             />
           ))}
         </div>
       </div>
+
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveTask}
+        task={taskToEdit} // null = ajout, objet = édition
+      />
     </div>
   );
 }

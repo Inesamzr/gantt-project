@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { persons, taskTypes } from "../data/tasks";
 import StatusSelect from "./StatusSelect";
 import CustomSelect from "./CustomSelect";
 
-function TaskModal({ isOpen, onClose, onSave }) {
+function TaskModal({ isOpen, onClose, onSave, task }) {
   const [name, setName] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
   const [status, setStatus] = useState("à faire");
@@ -13,6 +13,30 @@ function TaskModal({ isOpen, onClose, onSave }) {
   const [startDate, setStartDate] = useState("2025-09-10");
   const [duration, setDuration] = useState(1);
 
+  useEffect(() => {
+    if (task) {
+      setName(task.name || "");
+      setAssignedTo(task.assignedTo || "");
+      setStatus(task.status || "à faire");
+      setType(task.type || "");
+      setDescription(task.description || "");
+      setStartDate(task.start || "2025-09-10");
+
+      const d =
+        Math.ceil(
+          (new Date(task.end) - new Date(task.start)) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      setDuration(d > 0 ? d : 1);
+    } else {
+      setName("");
+      setAssignedTo("");
+      setStatus("à faire");
+      setType("");
+      setDescription("");
+      setStartDate("2025-09-10");
+      setDuration(1);
+    }
+  }, [task, isOpen]);
   if (!isOpen) return null;
 
   const calculateEndDate = () => {
@@ -24,8 +48,9 @@ function TaskModal({ isOpen, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newTask = {
-      id: Date.now(),
+    const updatedTask = {
+      ...task, // conserve l'id si on édite
+      id: task ? task.id : Date.now(),
       name,
       assignedTo,
       status,
@@ -34,7 +59,7 @@ function TaskModal({ isOpen, onClose, onSave }) {
       start: startDate,
       end: calculateEndDate(),
     };
-    onSave(newTask);
+    onSave(updatedTask);
     onClose();
   };
 
@@ -49,7 +74,7 @@ function TaskModal({ isOpen, onClose, onSave }) {
               width="22"
               className="text-primary-turquoise"
             />
-            Ajout d'une tâche
+            {task ? "Modifier la tâche" : "Ajout d'une tâche"}
           </h2>
           <button onClick={onClose} className="text-white hover:text-gray-200">
             <Icon icon="akar-icons:cross" width="20" />
