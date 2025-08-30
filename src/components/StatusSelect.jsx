@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { statuses } from "../data/tasks";
 
@@ -17,9 +17,13 @@ const statusStyles = {
   },
 };
 
-function StatusSelect({ onChange }) {
+function StatusSelect({ onChange, defaultValue = "à faire" }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(statuses[0]);
+  const [selected, setSelected] = useState(defaultValue);
+
+  useEffect(() => {
+    if (onChange) onChange(defaultValue);
+  }, [defaultValue, onChange]);
 
   const styleFor = (s) =>
     statusStyles[s] || {

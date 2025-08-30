@@ -7,7 +7,7 @@ import CustomSelect from "./CustomSelect";
 function TaskModal({ isOpen, onClose, onSave }) {
   const [name, setName] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("à faire");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("2025-09-10");
@@ -49,7 +49,7 @@ function TaskModal({ isOpen, onClose, onSave }) {
               width="22"
               className="text-primary-turquoise"
             />
-            Ajout d&apos;une tâche
+            Ajout d'une tâche
           </h2>
           <button onClick={onClose} className="text-white hover:text-gray-200">
             <Icon icon="akar-icons:cross" width="20" />
@@ -83,7 +83,6 @@ function TaskModal({ isOpen, onClose, onSave }) {
                 options={persons.map((p) => p.name)}
                 allowEmpty={true}
                 emptyLabel="Vide"
-                // stocker la valeur
                 onChange={setAssignedTo}
               />
             </div>
@@ -91,7 +90,7 @@ function TaskModal({ isOpen, onClose, onSave }) {
               <label className="block text-sm font-bold mb-1">
                 État<span className="text-primary-orange">*</span>
               </label>
-              <StatusSelect onChange={setStatus} />
+              <StatusSelect onChange={setStatus} defaultValue="à faire" />
             </div>
           </div>
 
