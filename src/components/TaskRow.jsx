@@ -171,7 +171,7 @@ function TaskRow({ task, totalDays, ganttStartDate, isOpen, toggleOpen }) {
       </div>
 
       <div
-        className="w-[80px] h-8 flex items-center justify-center ml-[4px]"
+        className="w-[80px] h-8 flex items-center justify-center ml-[4px] z-50 bg-white"
         style={{ position: "sticky", right: 0 }}
       >
         {task.status === "terminée" && (
