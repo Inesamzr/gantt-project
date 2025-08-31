@@ -8,12 +8,12 @@ function TaskRow({
   isOpen,
   toggleOpen,
   onEdit,
+  level = 0,
 }) {
   const start = new Date(task.start);
   const end = new Date(task.end);
   const ganttStart = new Date(ganttStartDate);
-  const isSubtask = Array.isArray(task.parent) && task.parent.length > 0;
-  const isSuptask = Array.isArray(task.children) && task.children.length > 0;
+  const hasChildren = task.children && task.children.length > 0;
 
   const typeColors = {
     analyse: "var(--color-type-analyse)",
@@ -34,192 +34,164 @@ function TaskRow({
     Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
   function countWorkingDaysBetween(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const s = new Date(startDate);
+    const e = new Date(endDate);
     let count = 0;
-
-    while (start < end) {
-      const day = start.getDay();
+    while (s < e) {
+      const day = s.getDay();
       if (day >= 1 && day <= 5) count++;
-      start.setDate(start.getDate() + 1);
+      s.setDate(s.getDate() + 1);
     }
-
     return count;
   }
+
   function getWorkingDays(startDate, totalDays) {
     const days = [];
     const current = new Date(startDate);
-
     while (days.length < totalDays) {
       const day = current.getDay();
-      if (day >= 1 && day <= 5) {
-        days.push(new Date(current));
-      }
+      if (day >= 1 && day <= 5) days.push(new Date(current));
       current.setDate(current.getDate() + 1);
     }
-
     return days;
   }
 
   const workingDays = getWorkingDays(ganttStartDate, totalDays);
 
   return (
-    <div className="flex">
-      <div
-        className="grid items-center mr-[4px]"
-        style={{
-          gridTemplateColumns: `40px 304px 150px 70px 80px`,
-        }}
-      >
+    <>
+      {/* Ligne de la tâche */}
+      <div className="flex">
         <div
-          className={`h-8 flex items-center justify-center font-bold text-center ${
-            isSubtask
-              ? "text-primary-blue bg-white rounded-l-md"
-              : "bg-primary-blue text-white rounded-l-md"
-          }`}
-          style={{ position: "sticky", left: 0, minWidth: "40px" }}
+          className="grid items-center mr-[4px]"
+          style={{
+            gridTemplateColumns: `40px 304px 150px 70px 80px`,
+          }}
         >
-          {!isSubtask && <p>{rowNumber}</p>}
-        </div>
+          {/* Numéro de ligne */}
+          <div
+            className="h-8 flex items-center justify-center font-bold text-center bg-primary-blue text-white rounded-l-md"
+            style={{ position: "sticky", left: 0, minWidth: "40px" }}
+          >
+            <p>{rowNumber}</p>
+          </div>
 
-        <div
-          className={`h-8 bg-white flex items-center overflow-hidden truncate text-sm
-    ${isSubtask ? "pl-10" : isSuptask ? "pl-2" : "px-2"}`}
-        >
-          {isSuptask && (
-            <button onClick={() => toggleOpen(task.id)} className="mr-1">
+          {/* Nom */}
+          <div
+            className={`h-8 bg-white flex items-center overflow-hidden truncate text-sm px-2`}
+            style={{ paddingLeft: `${level * 20 + 8}px` }} // indentation enfants
+          >
+            {hasChildren && (
+              <button onClick={() => toggleOpen(task.id)} className="mr-1">
+                <Icon
+                  icon={isOpen ? "mdi:chevron-down" : "mdi:chevron-right"}
+                  className="text-primary-blue"
+                  width="16"
+                />
+              </button>
+            )}
+            {task.name}
+          </div>
+
+          {/* Date début */}
+          <div className="h-8 bg-white flex items-center px-2 text-sm">
+            {start.toLocaleDateString("fr-FR")}
+          </div>
+
+          {/* Durée */}
+          <div className="h-8 bg-white flex items-center justify-center text-sm">
+            {duration} j
+          </div>
+
+          {/* Actions */}
+          <div className="h-8 bg-white flex items-center justify-center gap-2">
+            <button title="Modifier" onClick={() => onEdit(task)}>
               <Icon
-                icon={isOpen ? "mdi:chevron-down" : "mdi:chevron-right"}
-                className="text-primary-blue"
-                width="16"
+                icon="mdi:pencil"
+                width="20"
+                className="text-primary-turquoise"
               />
             </button>
-          )}
-
-          {task.name}
+            <button title="Ajouter sous-tâche">
+              <Icon
+                icon="mdi:plus"
+                width="20"
+                className="text-primary-turquoise"
+              />
+            </button>
+          </div>
         </div>
 
-        <div className="h-8 bg-white flex items-center px-2 text-sm">
-          {start.toLocaleDateString("fr-FR")}
-        </div>
+        {/* Barres dans le Gantt */}
+        <div
+          className="relative grid gap-[4px]"
+          style={{
+            gridTemplateColumns: `repeat(${totalDays}, 40px)`,
+          }}
+        >
+          {(() => {
+            const offset = countWorkingDaysBetween(ganttStart, start);
+            const endOffset = countWorkingDaysBetween(ganttStart, end);
+            if (endOffset < 0 || offset > totalDays - 1) return null;
 
-        <div className="h-8 bg-white flex items-center justify-center text-sm">
-          {duration} j
-        </div>
+            const visibleOffset = Math.max(0, offset);
+            const visibleDuration =
+              Math.min(endOffset, totalDays - 1) - visibleOffset + 1;
 
-        <div className="h-8 bg-white flex items-center justify-center gap-2">
-          <button title="Modifier" onClick={() => onEdit(task)}>
-            <Icon
-              icon="mdi:pencil"
-              width="20"
-              className="text-primary-turquoise"
-            />
-          </button>
-          <button title="Ajouter sous-tâche">
-            <Icon
-              icon="mdi:plus"
-              width="20"
-              className="text-primary-turquoise"
-            />
-          </button>
+            return (
+              <div
+                className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
+                style={{
+                  left: `${visibleOffset * 44}px`,
+                  width: `${visibleDuration * 44 - 4 - 3}px`,
+                  backgroundColor:
+                    typeColors[task.type] || "var(--color-primary-orange)",
+                  zIndex: 2,
+                }}
+                title={task.name}
+              >
+                <span className="truncate whitespace-nowrap">{task.name}</span>
+              </div>
+            );
+          })()}
+
+          {workingDays.map((day, i) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            day.setHours(0, 0, 0, 0);
+            const isToday = day.getTime() === today.getTime();
+
+            return (
+              <div
+                key={i}
+                className={`h-8 ${
+                  isToday ? "bg-background-label" : "bg-white"
+                }`}
+              />
+            );
+          })}
         </div>
       </div>
 
-      <div
-        className="relative grid gap-[4px]"
-        style={{
-          gridTemplateColumns: `repeat(${totalDays}, 40px)`,
-        }}
-      >
-        {(() => {
-          const offset = countWorkingDaysBetween(ganttStart, start);
-
-          const endOffset = countWorkingDaysBetween(ganttStart, end);
-
-          if (endOffset < 0 || offset > totalDays - 1) return null;
-
-          const visibleOffset = Math.max(0, offset);
-          const visibleDuration =
-            Math.min(endOffset, totalDays - 1) - visibleOffset + 1;
-
-          return (
-            <div
-              className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
-              style={{
-                left: `${visibleOffset * 44}px`,
-                width: `${visibleDuration * 44 - 4 - 3}px`,
-                backgroundColor:
-                  typeColors[task.type] || "var(--color-primary-orange)",
-                zIndex: 2,
-              }}
-              title={task.name}
-            >
-              <span className="truncate whitespace-nowrap">{task.name}</span>
-            </div>
-          );
-        })()}
-
-        {/* Fond du tableau */}
-        {workingDays.map((day, i) => {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          day.setHours(0, 0, 0, 0);
-
-          const isToday = day.getTime() === today.getTime();
-
-          return (
-            <div
-              key={i}
-              className={`h-8 ${
-                isToday ? "bg-background-label" : "bg-white"
-              } relative`}
-            ></div>
-          );
-        })}
-      </div>
-
-      <div
-        className="w-[80px] h-8 flex items-center justify-center ml-[4px] z-3 bg-white"
-        style={{ position: "sticky", right: 0 }}
-      >
-        {task.status === "terminée" && (
-          <div
-            className="w-[40px] h-8 flex items-center justify-center"
-            style={{ backgroundColor: "var(--status-bg-success)" }}
-          >
-            <Icon
-              icon="el:ok-circle"
-              className="text-[var(--status-primary-success)]"
-              width="20"
+      {/* Affichage récursif des enfants */}
+      {hasChildren && isOpen && (
+        <div className="flex flex-col">
+          {task.children.map((child, idx) => (
+            <TaskRow
+              key={child.id}
+              task={child}
+              rowNumber={`${rowNumber}.${idx + 1}`}
+              totalDays={totalDays}
+              ganttStartDate={ganttStartDate}
+              isOpen={isOpen}
+              toggleOpen={toggleOpen}
+              onEdit={onEdit}
+              level={level + 1}
             />
-          </div>
-        )}
-        {task.status === "en cours" && (
-          <div
-            className="w-[40px] h-8 flex items-center justify-center"
-            style={{ backgroundColor: "var(--status-bg-progress)" }}
-          >
-            <Icon
-              icon="mdi:progress-check"
-              className="text-[var(--status-primary-progress)]"
-              width="24"
-            />
-          </div>
-        )}
-        {task.status === "à faire" && (
-          <div
-            className="w-[40px] h-8 flex items-center justify-center"
-            style={{ backgroundColor: "var(--status-bg-todo)" }}
-          >
-            <Icon
-              icon="tdesign:time"
-              className="text-[var(--status-primary-todo)]"
-              width="20"
-            />
-          </div>
-        )}
-      </div>
-    </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
