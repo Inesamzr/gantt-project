@@ -2,6 +2,7 @@ import { useState } from "react";
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow";
 import TaskModal from "./TaskModal";
+import TaskDetailsModal from "./TaskDetailsModal";
 
 function GanttChart({
   tasks,
@@ -16,6 +17,7 @@ function GanttChart({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [parentForChild, setParentForChild] = useState(null);
+  const [detailsTask, setDetailsTask] = useState(null);
 
   const toggleTaskOpen = (taskId) => {
     setOpenedTasks((prev) =>
@@ -158,6 +160,7 @@ function GanttChart({
               toggleOpen={toggleTaskOpen}
               onEdit={() => openEditModal(task)}
               onAddChild={openAddChildModal}
+              onViewDetails={(task) => setDetailsTask(task)}
             />
           ))}
         </div>
@@ -169,6 +172,12 @@ function GanttChart({
         onSave={handleSaveTask}
         task={taskToEdit}
         parentTask={parentForChild} // pour préremplir le parent si on ajoute une sous-tâche
+      />
+
+      <TaskDetailsModal
+        isOpen={!!detailsTask}
+        task={detailsTask}
+        onClose={() => setDetailsTask(null)}
       />
     </div>
   );

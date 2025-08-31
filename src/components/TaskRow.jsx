@@ -8,6 +8,7 @@ function TaskRow({
   openedTasks,
   toggleOpen,
   onEdit,
+  onViewDetails,
   onAddChild,
   level = 0,
 }) {
@@ -107,6 +108,13 @@ function TaskRow({
 
           {/* Actions */}
           <div className="h-8 bg-white flex items-center justify-center gap-2">
+            <button title="Voir détails" onClick={() => onViewDetails(task)}>
+              <Icon
+                icon="mdi:eye"
+                width="20"
+                className="text-primary-turquoise"
+              />
+            </button>
             <button title="Modifier" onClick={() => onEdit(task)}>
               <Icon
                 icon="mdi:pencil"
@@ -192,6 +200,7 @@ function TaskRow({
               isOpen={isOpen}
               toggleOpen={toggleOpen}
               onEdit={onEdit}
+              onViewDetails={onViewDetails}
               level={level + 1}
               onAddChild={onAddChild}
             />
