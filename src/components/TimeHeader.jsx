@@ -71,14 +71,10 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
             gap: "4px",
           }}
         >
-          <div className="h-8 flex items-center px-2 leading-non">Nom</div>
-          <div className="h-8 flex items-center px-2 leading-non">
-            Assignée à
-          </div>
-          <div className="h-8 flex items-center px-2 leading-non">
-            Date début
-          </div>
-          <div className="h-8 flex items-center px-2 leading-non">Durée</div>
+          <div className="h-8 flex items-center leading-non px-2">Nom</div>
+          <div className="h-8 flex items-center leading-non">Assignée à</div>
+          <div className="h-8 flex items-center leading-non">Date début</div>
+          <div className="h-8 flex items-center leading-non">Durée</div>
           <div className="h-8 flex items-center justify-center pr-4">
             <button
               onClick={onAddClick}
