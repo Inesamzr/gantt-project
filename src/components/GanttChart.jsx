@@ -45,6 +45,10 @@ function GanttChart({
     setIsModalOpen(true);
   };
 
+  const handleChangeStatus = (updatedTask) => {
+    onAddTask(updatedTask); // ton parent (App) gère update + localStorage
+  };
+
   // fonction récursive pour insérer un enfant dans le bon parent
   function addChildRecursive(tasks, parentId, newChild) {
     return tasks.map((t) => {
@@ -160,6 +164,7 @@ function GanttChart({
               toggleOpen={toggleTaskOpen}
               onEdit={() => openEditModal(task)}
               onAddChild={openAddChildModal}
+              onChangeStatus={handleChangeStatus}
               onViewDetails={(task) => setDetailsTask(task)}
             />
           ))}

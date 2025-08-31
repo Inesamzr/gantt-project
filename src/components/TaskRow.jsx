@@ -10,6 +10,7 @@ function TaskRow({
   onEdit,
   onViewDetails,
   onAddChild,
+  onChangeStatus,
   level = 0,
 }) {
   const COLS = {
@@ -69,6 +70,13 @@ function TaskRow({
   }
 
   const workingDays = getWorkingDays(ganttStartDate, totalDays);
+
+  const cycleStatus = () => {
+    const order = ["à faire", "en cours", "terminée"];
+    const currentIndex = order.indexOf(task.status);
+    const nextStatus = order[(currentIndex + 1) % order.length];
+    onChangeStatus({ ...task, status: nextStatus });
+  };
 
   return (
     <>
@@ -193,14 +201,15 @@ function TaskRow({
           })}
         </div>
 
-        {/* Badge statut à droite (inchangé) */}
         <div
-          className="w-[80px] h-8 flex items-center justify-center ml-[4px] z-3 bg-white"
+          className="w-[80px] h-8 flex items-center justify-center ml-[4px] bg-white cursor-pointer"
           style={{ position: "sticky", right: 0 }}
+          onClick={cycleStatus} // ⚡ clic change le statut
+          title="Changer le statut"
         >
           {task.status === "terminée" && (
             <div
-              className="w-[40px] h-8 flex items-center justify-center"
+              className="w-[40px] h-8 flex items-center justify-center rounded cursor-pointer"
               style={{ backgroundColor: "var(--status-bg-success)" }}
             >
               <Icon
@@ -212,7 +221,7 @@ function TaskRow({
           )}
           {task.status === "en cours" && (
             <div
-              className="w-[40px] h-8 flex items-center justify-center"
+              className="w-[40px] h-8 flex items-center justify-center rounded cursor-pointer"
               style={{ backgroundColor: "var(--status-bg-progress)" }}
             >
               <Icon
@@ -224,7 +233,7 @@ function TaskRow({
           )}
           {task.status === "à faire" && (
             <div
-              className="w-[40px] h-8 flex items-center justify-center"
+              className="w-[40px] h-8 flex items-center justify-center rounded cursor-pointer"
               style={{ backgroundColor: "var(--status-bg-todo)" }}
             >
               <Icon
