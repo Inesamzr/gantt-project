@@ -39,12 +39,14 @@ function App() {
       setTaskList((prev) => {
         const updated = prev.filter((t) => t.id !== newTask.id);
         localStorage.setItem("tasks", JSON.stringify(updated));
+        showToast("Tâche supprimée");
         return updated;
       });
     } else if (newTask.action === "replaceAll") {
       // cas où on a passé la liste entière déjà mise à jour
       setTaskList(newTask.tasks);
       localStorage.setItem("tasks", JSON.stringify(newTask.tasks));
+      showToast("Tâche mise à jour");
     } else {
       setTaskList((prev) => {
         const exists = prev.some((t) => t.id === newTask.id);
@@ -55,6 +57,7 @@ function App() {
           );
         } else {
           updated = [...prev, newTask];
+          showToast("Tâche ajoutée");
         }
         updated = updated.sort((a, b) => new Date(a.start) - new Date(b.start));
         localStorage.setItem("tasks", JSON.stringify(updated));
