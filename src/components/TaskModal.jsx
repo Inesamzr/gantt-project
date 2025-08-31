@@ -108,6 +108,7 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
                 options={persons.map((p) => p.name)}
                 allowEmpty={true}
                 emptyLabel="Vide"
+                value={assignedTo}
                 onChange={setAssignedTo}
               />
             </div>
@@ -115,7 +116,11 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
               <label className="block text-sm font-bold mb-1">
                 État<span className="text-primary-orange">*</span>
               </label>
-              <StatusSelect onChange={setStatus} defaultValue="à faire" />
+              <StatusSelect
+                value={status}
+                onChange={setStatus}
+                defaultValue="à faire"
+              />
             </div>
           </div>
 
@@ -130,6 +135,7 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
               )}
               allowEmpty={true}
               emptyLabel="Vide"
+              value={type}
               onChange={setType}
             />
           </div>

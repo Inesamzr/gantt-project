@@ -27,6 +27,29 @@ function App() {
     }
   }, []);
 
+  const handleAddOrUpdateTask = (newTask) => {
+    setTaskList((prev) => {
+      const exists = prev.some((t) => t.id === newTask.id);
+
+      let updated;
+      if (exists) {
+        // 🔹 Mise à jour
+        updated = prev.map((t) =>
+          t.id === newTask.id ? { ...t, ...newTask } : t
+        );
+      } else {
+        // 🔹 Ajout
+        updated = [...prev, newTask];
+      }
+
+      // 🔹 Tri par date
+      updated = updated.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+      localStorage.setItem("tasks", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-t from-primary-blue/20 to-background-page">
       <header className="p-4 pl-8">
@@ -69,13 +92,7 @@ function App() {
           assignedToFilter={assignedToFilter}
           statusFilter={statusFilter}
           typeFilter={typeFilter}
-          onAddTask={(task) => {
-            const updated = [...taskList, task].sort(
-              (a, b) => new Date(a.start) - new Date(b.start)
-            );
-            setTaskList(updated);
-            localStorage.setItem("tasks", JSON.stringify(updated));
-          }}
+          onAddTask={handleAddOrUpdateTask}
         />
       </main>
 

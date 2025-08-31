@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 
 function CustomSelect({
   options,
   allowEmpty = false,
   emptyLabel = "Vide",
+  value,
   onChange,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(allowEmpty ? "" : options[0]);
+
+  useEffect(() => {
+    setSelected(value || (allowEmpty ? "" : options[0]));
+  }, [value, options, allowEmpty]);
 
   const handleSelect = (value) => {
     setSelected(value);

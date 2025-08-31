@@ -17,13 +17,13 @@ const statusStyles = {
   },
 };
 
-function StatusSelect({ onChange, defaultValue = "à faire" }) {
+function StatusSelect({ value, onChange, defaultValue = "à faire" }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(defaultValue);
 
   useEffect(() => {
-    if (onChange) onChange(defaultValue);
-  }, [defaultValue, onChange]);
+    setSelected(value || statuses[0]);
+  }, [value]);
 
   const styleFor = (s) =>
     statusStyles[s] || {
