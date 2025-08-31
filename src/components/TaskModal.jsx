@@ -4,7 +4,7 @@ import { persons, taskTypes } from "../data/tasks";
 import StatusSelect from "./StatusSelect";
 import CustomSelect from "./CustomSelect";
 
-function TaskModal({ isOpen, onClose, onSave, task }) {
+function TaskModal({ isOpen, onClose, onSave, task, parentTask }) {
   const [name, setName] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
   const [status, setStatus] = useState("à faire");
@@ -82,7 +82,11 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
               width="22"
               className="text-primary-turquoise"
             />
-            {task ? "Modifier la tâche" : "Ajout d'une tâche"}
+            {task
+              ? "Modifier la tâche"
+              : parentTask
+              ? `Ajout d’une sous-tâche à "${parentTask.name}"`
+              : "Ajout d’une tâche"}{" "}
           </h2>
           <button onClick={onClose} className="text-white hover:text-gray-200">
             <Icon icon="akar-icons:cross" width="20" />

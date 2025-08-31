@@ -168,6 +168,7 @@ function GanttChart({
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveTask}
         task={taskToEdit}
+        parentTask={parentForChild} // pour préremplir le parent si on ajoute une sous-tâche
       />
     </div>
   );
