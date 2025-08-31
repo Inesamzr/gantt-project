@@ -154,7 +154,7 @@ function GanttChart({
               rowNumber={index + 1}
               totalDays={totalDays}
               ganttStartDate={ganttStartDate}
-              isOpen={openedTasks.includes(task.id)}
+              openedTasks={openedTasks}
               toggleOpen={toggleTaskOpen}
               onEdit={() => openEditModal(task)}
               onAddChild={openAddChildModal}

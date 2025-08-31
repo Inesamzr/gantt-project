@@ -5,12 +5,13 @@ function TaskRow({
   totalDays,
   rowNumber,
   ganttStartDate,
-  isOpen,
+  openedTasks,
   toggleOpen,
   onEdit,
   onAddChild,
   level = 0,
 }) {
+  const isOpen = openedTasks.includes(task.id);
   const start = new Date(task.start);
   const end = new Date(task.end);
   const ganttStart = new Date(ganttStartDate);
@@ -187,6 +188,7 @@ function TaskRow({
               rowNumber={`${rowNumber}.${idx + 1}`}
               totalDays={totalDays}
               ganttStartDate={ganttStartDate}
+              openedTasks={openedTasks}
               isOpen={isOpen}
               toggleOpen={toggleOpen}
               onEdit={onEdit}
