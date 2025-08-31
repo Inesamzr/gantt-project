@@ -138,7 +138,7 @@ function GanttChart({
       <div
         className="mx-auto"
         style={{
-          maxWidth: `calc(40px + 600px + 40px * ${totalDays})`,
+          maxWidth: `calc(40px + 730px + 40px * ${totalDays})`,
         }}
       >
         <div className="sticky top-0 z-30">

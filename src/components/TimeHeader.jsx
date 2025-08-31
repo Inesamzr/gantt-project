@@ -1,19 +1,28 @@
 import { Icon } from "@iconify/react";
 
 function TimeHeader({ startDate, endDate, onAddClick }) {
+  const COLS = {
+    id: 40,
+    name: 300,
+    assignee: 170,
+    start: 150,
+    duration: 70,
+    actions: 80,
+  };
+
+  const LEFT_WIDTH =
+    COLS.name + COLS.assignee + COLS.start + COLS.duration + COLS.actions;
+
   const days = [];
   const weeks = [];
-
   const current = new Date(startDate);
   const end = new Date(endDate);
 
   while (current <= end) {
     const weekDays = [];
-
     for (let d = 0; d < 7 && current <= end; d++) {
-      const dayOfWeek = current.getDay(); // 1 = lundi, ..., 5 = vendredi
-
-      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+      const dow = current.getDay(); // 1..5 = LUN..VEN
+      if (dow >= 1 && dow <= 5) {
         weekDays.push({
           key: current.toISOString(),
           label: current
@@ -22,10 +31,8 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
           date: new Date(current),
         });
       }
-
       current.setDate(current.getDate() + 1);
     }
-
     if (weekDays.length > 0) {
       const firstDate = weekDays[0].date.toLocaleDateString("fr-FR", {
         day: "2-digit",
@@ -33,17 +40,12 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
       });
       const lastDate = weekDays[weekDays.length - 1].date.toLocaleDateString(
         "fr-FR",
-        {
-          day: "2-digit",
-          month: "short",
-        }
+        { day: "2-digit", month: "short" }
       );
-
       weeks.push({
         label: `${firstDate} – ${lastDate}`,
         span: weekDays.length,
       });
-
       days.push(...weekDays);
     }
   }
@@ -53,29 +55,34 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `40px 600px repeat(${days.length}, 40px)`,
+          gridTemplateColumns: `40px ${LEFT_WIDTH}px repeat(${days.length}, 40px)`,
           gap: "4px",
         }}
       >
-        {/* Case vide pour colonne ID */}
-        <div className="row-span-2 bg-transparent"></div>
+        {/* Colonne ID (vide, collée à gauche) */}
+        <div className="row-span-2 bg-transparent" />
 
-        {/* Header: nom, date début, durée, + */}
+        {/* En-tête des colonnes fixes (Nom, Assignée à, Date début, Durée, +) */}
         <div
           className="flex items-center justify-between row-span-2 bg-primary-blue text-white font-semibold rounded-t-xl"
           style={{
             display: "grid",
-            gridTemplateColumns: `300px 150px 58px 80px`,
+            gridTemplateColumns: `${COLS.name}px ${COLS.assignee}px ${COLS.start}px ${COLS.duration}px ${COLS.actions}px`,
             gap: "4px",
           }}
         >
-          <div className="h-8 flex items-center px-4">Nom</div>
-          <div className="h-8 flex items-center px-2">Date début</div>
-          <div className="h-8 flex items-center px-2">Durée</div>
-          <div className="h-8 flex items-center justify-end pr-4">
+          <div className="h-8 flex items-center px-2 leading-non">Nom</div>
+          <div className="h-8 flex items-center px-2 leading-non">
+            Assignée à
+          </div>
+          <div className="h-8 flex items-center px-2 leading-non">
+            Date début
+          </div>
+          <div className="h-8 flex items-center px-2 leading-non">Durée</div>
+          <div className="h-8 flex items-center justify-center pr-4">
             <button
               onClick={onAddClick}
-              className="w-6 h-6 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
+              className="w-7 h-7 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
               title="Ajouter une tâche"
             >
               <Icon icon="mdi:plus" width="20" />
@@ -83,7 +90,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
           </div>
         </div>
 
-        {/* Semaine */}
+        {/* Semaines */}
         {weeks.map((week, i) => (
           <div
             key={i}
@@ -94,7 +101,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
           </div>
         ))}
 
-        {/* Jours */}
+        {/* Jours (LUN..VEN) */}
         {days.map((day) => (
           <div
             key={day.key}
