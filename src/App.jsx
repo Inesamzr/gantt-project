@@ -27,22 +27,21 @@ function App() {
     }
   }, []);
 
-  const handleAddOrUpdateTask = (newTask) => {
+  const handleAddOrUpdateTask = (task) => {
     setTaskList((prev) => {
-      const exists = prev.some((t) => t.id === newTask.id);
-
       let updated;
-      if (exists) {
-        // 🔹 Mise à jour
-        updated = prev.map((t) =>
-          t.id === newTask.id ? { ...t, ...newTask } : t
-        );
+
+      if (task.action === "delete" || task._delete) {
+        updated = prev.filter((t) => t.id !== task.id);
       } else {
-        // 🔹 Ajout
-        updated = [...prev, newTask];
+        const exists = prev.some((t) => t.id === task.id);
+        if (exists) {
+          updated = prev.map((t) => (t.id === task.id ? { ...t, ...task } : t));
+        } else {
+          updated = [...prev, task];
+        }
       }
 
-      // 🔹 Tri par date
       updated = updated.sort((a, b) => new Date(a.start) - new Date(b.start));
 
       localStorage.setItem("tasks", JSON.stringify(updated));

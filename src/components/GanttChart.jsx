@@ -37,7 +37,11 @@ function GanttChart({
 
   // sauvegarder une tâche (ajout ou maj)
   const handleSaveTask = (task) => {
-    onAddTask(task); // App va gérer ajout ou update + localStorage
+    if (task._delete) {
+      onAddTask({ ...task, action: "delete" });
+    } else {
+      onAddTask(task);
+    }
     setIsModalOpen(false);
     setTaskToEdit(null);
   };
@@ -126,7 +130,7 @@ function GanttChart({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveTask}
-        task={taskToEdit} // null = ajout, objet = édition
+        task={taskToEdit}
       />
     </div>
   );
