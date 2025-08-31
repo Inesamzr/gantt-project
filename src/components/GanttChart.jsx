@@ -15,6 +15,7 @@ function GanttChart({
   const [openedTasks, setOpenedTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const [parentForChild, setParentForChild] = useState(null);
 
   const toggleTaskOpen = (taskId) => {
     setOpenedTasks((prev) =>
@@ -35,15 +36,31 @@ function GanttChart({
     setIsModalOpen(true);
   };
 
-  // sauvegarder une tâche (ajout ou maj)
+  // ajouter une sous-tâche
+  const openAddChildModal = (parentTask) => {
+    setTaskToEdit(null);
+    setParentForChild(parentTask);
+    setIsModalOpen(true);
+  };
+
   const handleSaveTask = (task) => {
     if (task._delete) {
       onAddTask({ ...task, action: "delete" });
+    } else if (parentForChild) {
+      // ✅ ajout d’une sous-tâche
+      const newChild = { ...task, id: Date.now(), children: [] };
+      const updatedParent = {
+        ...parentForChild,
+        children: [...(parentForChild.children || []), newChild],
+      };
+      onAddTask(updatedParent); // met à jour le parent avec son enfant
     } else {
-      onAddTask(task);
+      onAddTask(task); // ajout normal
     }
+
     setIsModalOpen(false);
     setTaskToEdit(null);
+    setParentForChild(null);
   };
 
   let filteredTasks = tasks.filter((task) => {
@@ -121,6 +138,7 @@ function GanttChart({
               isOpen={openedTasks.includes(task.id)}
               toggleOpen={toggleTaskOpen}
               onEdit={() => openEditModal(task)}
+              onAddChild={openAddChildModal}
             />
           ))}
         </div>

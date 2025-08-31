@@ -8,6 +8,7 @@ function TaskRow({
   isOpen,
   toggleOpen,
   onEdit,
+  onAddChild,
   level = 0,
 }) {
   const start = new Date(task.start);
@@ -112,7 +113,10 @@ function TaskRow({
                 className="text-primary-turquoise"
               />
             </button>
-            <button title="Ajouter sous-tâche">
+            <button
+              title="Ajouter sous-tâche"
+              onClick={() => onAddChild(task)} // ✅
+            >
               <Icon
                 icon="mdi:plus"
                 width="20"
@@ -175,7 +179,7 @@ function TaskRow({
 
       {/* Affichage récursif des enfants */}
       {hasChildren && isOpen && (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-y-[4px]">
           {task.children.map((child, idx) => (
             <TaskRow
               key={child.id}
