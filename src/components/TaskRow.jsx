@@ -184,6 +184,47 @@ function TaskRow({
             );
           })}
         </div>
+        <div
+          className="w-[80px] h-8 flex items-center justify-center ml-[4px] z-3 bg-white"
+          style={{ position: "sticky", right: 0 }}
+        >
+          {task.status === "terminée" && (
+            <div
+              className="w-[40px] h-8 flex items-center justify-center"
+              style={{ backgroundColor: "var(--status-bg-success)" }}
+            >
+              <Icon
+                icon="el:ok-circle"
+                className="text-[var(--status-primary-success)]"
+                width="20"
+              />
+            </div>
+          )}
+          {task.status === "en cours" && (
+            <div
+              className="w-[40px] h-8 flex items-center justify-center"
+              style={{ backgroundColor: "var(--status-bg-progress)" }}
+            >
+              <Icon
+                icon="mdi:progress-check"
+                className="text-[var(--status-primary-progress)]"
+                width="24"
+              />
+            </div>
+          )}
+          {task.status === "à faire" && (
+            <div
+              className="w-[40px] h-8 flex items-center justify-center"
+              style={{ backgroundColor: "var(--status-bg-todo)" }}
+            >
+              <Icon
+                icon="tdesign:time"
+                className="text-[var(--status-primary-todo)]"
+                width="20"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Affichage récursif des enfants */}
