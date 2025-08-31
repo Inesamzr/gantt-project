@@ -34,26 +34,33 @@ function App() {
     }
   }, []);
 
-  const handleAddOrUpdateTask = (task) => {
-    setTaskList((prev) => {
-      let updated;
-      if (task.action === "delete") {
-        updated = prev.filter((t) => t.id !== task.id);
-        showToast("Tâche supprimée ✅");
-      } else {
-        const exists = prev.some((t) => t.id === task.id);
+  const handleAddOrUpdateTask = (newTask) => {
+    if (newTask.action === "delete") {
+      setTaskList((prev) => {
+        const updated = prev.filter((t) => t.id !== newTask.id);
+        localStorage.setItem("tasks", JSON.stringify(updated));
+        return updated;
+      });
+    } else if (newTask.action === "replaceAll") {
+      // cas où on a passé la liste entière déjà mise à jour
+      setTaskList(newTask.tasks);
+      localStorage.setItem("tasks", JSON.stringify(newTask.tasks));
+    } else {
+      setTaskList((prev) => {
+        const exists = prev.some((t) => t.id === newTask.id);
+        let updated;
         if (exists) {
-          updated = prev.map((t) => (t.id === task.id ? { ...t, ...task } : t));
-          showToast("Tâche mise à jour ✅");
+          updated = prev.map((t) =>
+            t.id === newTask.id ? { ...t, ...newTask } : t
+          );
         } else {
-          updated = [...prev, task];
-          showToast("Tâche ajoutée ✅");
+          updated = [...prev, newTask];
         }
-      }
-      updated = updated.sort((a, b) => new Date(a.start) - new Date(b.start));
-      localStorage.setItem("tasks", JSON.stringify(updated));
-      return updated;
-    });
+        updated = updated.sort((a, b) => new Date(a.start) - new Date(b.start));
+        localStorage.setItem("tasks", JSON.stringify(updated));
+        return updated;
+      });
+    }
   };
 
   return (

@@ -191,6 +191,7 @@ function TaskRow({
               toggleOpen={toggleOpen}
               onEdit={onEdit}
               level={level + 1}
+              onAddChild={onAddChild}
             />
           ))}
         </div>

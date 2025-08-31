@@ -43,21 +43,40 @@ function GanttChart({
     setIsModalOpen(true);
   };
 
+  // fonction récursive pour insérer un enfant dans le bon parent
+  function addChildRecursive(tasks, parentId, newChild) {
+    return tasks.map((t) => {
+      if (t.id === parentId) {
+        return {
+          ...t,
+          children: [...(t.children || []), newChild],
+        };
+      }
+      if (t.children && t.children.length > 0) {
+        return {
+          ...t,
+          children: addChildRecursive(t.children, parentId, newChild),
+        };
+      }
+      return t;
+    });
+  }
+
   const handleSaveTask = (task) => {
     if (task._delete) {
       onAddTask({ ...task, action: "delete" });
     } else if (parentForChild) {
-      // ✅ ajout d’une sous-tâche
       const newChild = { ...task, id: Date.now(), children: [] };
-      const updatedParent = {
-        ...parentForChild,
-        children: [...(parentForChild.children || []), newChild],
-      };
-      onAddTask(updatedParent); // met à jour le parent avec son enfant
+      // passe l’ID du parent à la fonction récursive
+      const updatedTasks = addChildRecursive(
+        tasks,
+        parentForChild.id,
+        newChild
+      );
+      onAddTask({ action: "replaceAll", tasks: updatedTasks }); // ⚡️ propager la nouvelle liste
     } else {
-      onAddTask(task); // ajout normal
+      onAddTask(task); // ajout / édition normale
     }
-
     setIsModalOpen(false);
     setTaskToEdit(null);
     setParentForChild(null);
