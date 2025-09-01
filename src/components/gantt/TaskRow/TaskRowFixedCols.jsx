@@ -22,7 +22,10 @@ function TaskRowFixedCols({
       }}
     >
       {/* ID */}
-      <div className="h-8 flex items-center justify-center font-bold bg-primary-blue text-white rounded-l-md">
+      <div
+        className="h-8 flex items-center justify-center font-bold bg-primary-blue text-white rounded-l-md"
+        style={{ position: "sticky", left: 0 }}
+      >
         {rowNumber}
       </div>
 
