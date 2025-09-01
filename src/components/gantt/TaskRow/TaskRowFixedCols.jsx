@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { COLS } from "../../config/columns";
+import { COLS } from "../../../config/columns";
 
 function TaskRowFixedCols({
   task,

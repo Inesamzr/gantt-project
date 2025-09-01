@@ -5,7 +5,7 @@ import {
   TaskStatusSection,
   TaskDescriptionSection,
   TaskChildrenSection,
-  TaskDependenciesSection, 
+  TaskDependenciesSection,
 } from "./TaskDetailsSections";
 
 function TaskDetailsModal({ isOpen, onClose, task, allTasks }) {

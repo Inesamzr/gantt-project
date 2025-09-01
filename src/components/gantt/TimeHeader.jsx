@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { COLS, LEFT_WIDTH } from "../config/columns";
-import useCalendar from "../hooks/useCalendar";
+import { COLS, LEFT_WIDTH } from "../../config/columns";
+import useCalendar from "../../hooks/gantt/useCalendar";
 
 function TimeHeader({ startDate, endDate, onAddClick }) {
   const { days, weeks } = useCalendar(startDate, endDate);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { statuses } from "../data/tasks";
+import { statuses } from "../../data/tasks";
 
 export function useStatusSelect(value, defaultValue = "à faire") {
   const [open, setOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { tasks } from "../data/tasks";
+import { tasks } from "../../data/tasks";
 
 export default function useTasks(showToast) {
   const [taskList, setTaskList] = useState([]);

@@ -1,13 +1,13 @@
 import { useState, useRef, useCallback } from "react";
-import { ganttConfig } from "../config/gantt";
-import useTaskFilters from "../hooks/useTaskFilters";
-import useWorkingDays from "../hooks/useWorkingDays";
-import { addChildRecursive } from "../hooks/useTaskHierarchy";
+import { ganttConfig } from "../../config/gantt";
+import useTaskFilters from "../../hooks/gantt/useTaskFilters";
+import useWorkingDays from "../../hooks/gantt/useWorkingDays";
+import { addChildRecursive } from "../../hooks/tasks/useTaskHierarchy";
 
 import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow/TaskRow";
-import TaskModal from "./TaskModal";
-import TaskDetailsModal from "./TaskDetailsModal";
+import TaskModal from "../tasks/TaskModal";
+import TaskDetailsModal from "../tasks/TaskDetailsModal";
 import DependenciesLayer from "./TaskRow/DependenciesLayer";
 
 function GanttChart({

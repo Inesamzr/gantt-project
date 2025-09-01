@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { countWorkingDaysBetween } from "../hooks/useWorkingDaysTaskRow";
+import { countWorkingDaysBetween } from "./useWorkingDaysTaskRow";
 
 export function useTaskBarPosition({
   task,

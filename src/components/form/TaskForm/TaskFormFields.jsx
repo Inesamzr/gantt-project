@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
-import { persons, taskTypes, tasks } from "../data/tasks";
-import StatusSelect from "./StatusSelect";
-import CustomSelect from "./CustomSelect";
+import { persons, taskTypes, tasks } from "../../../data/tasks";
+import StatusSelect from "../StatusSelect/StatusSelect";
+import CustomSelect from "../CustomSelect/CustomSelect";
 
 function TaskFormFields({ task, form, onClose }) {
   return (

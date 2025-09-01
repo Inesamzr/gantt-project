@@ -1,6 +1,6 @@
-import { typeColors } from "../../config/colors";
-import { getWorkingDays } from "../../hooks/useWorkingDaysTaskRow";
-import { useTaskBarPosition } from "../../hooks/useTaskBarPosition";
+import { typeColors } from "../../../config/colors";
+import { getWorkingDays } from "../../../hooks/gantt/useWorkingDaysTaskRow";
+import { useTaskBarPosition } from "../../../hooks/gantt/useTaskBarPosition";
 
 function TaskRowBar({
   task,

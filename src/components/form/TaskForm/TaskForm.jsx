@@ -1,6 +1,6 @@
-import WarningModal from "./WarningModal";
+import WarningModal from "../../common/WarningModal";
 import TaskFormFields from "./TaskFormFields";
-import { useTaskFormValidation } from "../hooks/useTaskFormValidation";
+import { useTaskFormValidation } from "../../../hooks/form/useTaskFormValidation";
 
 function TaskForm({ task, parentTask, form, onClose, onSave }) {
   const { warningMessage, setWarningMessage, handleSubmit } =

@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
-import useTaskForm from "../hooks/useTaskForm";
-import TaskForm from "./TaskForm";
-import DeleteConfirmation from "./DeleteConfirmation";
+import useTaskForm from "../../hooks/form/useTaskForm";
+import TaskForm from "../form/TaskForm/TaskForm";
+import DeleteConfirmation from "../common/DeleteConfirmation";
 
 function TaskModal({ isOpen, onClose, onSave, task, parentTask }) {
   const form = useTaskForm(task, isOpen);

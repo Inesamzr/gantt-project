@@ -1,4 +1,4 @@
-import { statusStyles } from "../config/statusStyles";
+import { statusStyles } from "../../../config/statusStyles";
 
 function StatusBadge({ status }) {
   const style = statusStyles[status] || {

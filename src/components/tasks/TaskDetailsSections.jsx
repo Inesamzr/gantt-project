@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../form/StatusSelect/StatusBadge";
 
 export function TaskInfoSection({ task }) {
   return (

@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { statuses } from "../data/tasks";
-import { useStatusSelect } from "../hooks/useStatusSelect";
+import { statuses } from "../../../data/tasks";
+import { useStatusSelect } from "../../../hooks/form/useStatusSelect";
 import StatusLabel from "./StatusBadge";
 
 function StatusSelect({ value, onChange, defaultValue = "à faire" }) {

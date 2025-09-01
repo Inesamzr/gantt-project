@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Dropdown from "../components/Dropdown";
-import GanttChart from "../components/GanttChart";
-import Toast from "../components/Toast";
+import Dropdown from "../components/common/Dropdown";
+import GanttChart from "../components/gantt/GanttChart";
+import Toast from "../components/common/Toast";
 import { persons, taskTypes, statuses } from "../data/tasks";
-import useTasks from "../hooks/useTasks";
+import useTasks from "../hooks/tasks/useTasks";
 
 function Dashboard() {
   const [assignedToFilter, setAssignedToFilter] = useState([]);

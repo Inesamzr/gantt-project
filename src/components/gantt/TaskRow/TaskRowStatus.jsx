@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { cycleStatus } from "../../utils/taskUtils";
+import { cycleStatus } from "../../../utils/taskUtils";
 
 function TaskRowStatus({ task, onChangeStatus }) {
   return (
