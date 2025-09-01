@@ -5,9 +5,10 @@ import {
   TaskStatusSection,
   TaskDescriptionSection,
   TaskChildrenSection,
+  TaskDependenciesSection, // 👈 import ajouté
 } from "./TaskDetailsSections";
 
-function TaskDetailsModal({ isOpen, onClose, task }) {
+function TaskDetailsModal({ isOpen, onClose, task, allTasks }) {
   if (!isOpen || !task) return null;
 
   return (
@@ -34,6 +35,7 @@ function TaskDetailsModal({ isOpen, onClose, task }) {
           <TaskDatesSection task={task} />
           <TaskStatusSection task={task} />
           <TaskDescriptionSection task={task} />
+          <TaskDependenciesSection task={task} allTasks={allTasks} />
           <TaskChildrenSection task={task} />
 
           {/* Bouton fermer */}

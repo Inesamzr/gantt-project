@@ -97,3 +97,35 @@ export function TaskChildrenSection({ task }) {
     </div>
   );
 }
+
+export function TaskDependenciesSection({ task, allTasks }) {
+  if (!task.dependencies || task.dependencies.length === 0) return null;
+
+  return (
+    <div>
+      <h3 className="text-md font-semibold flex items-center gap-2 text-secondary-gray mb-2">
+        <Icon icon="mdi:link-variant" width="20" />
+        Dépendances
+      </h3>
+      <ul className="pl-7 space-y-1 list-disc">
+        {task.dependencies.map((depId) => {
+          const depTask = allTasks?.find((t) => t.id === depId);
+          return (
+            <li key={depId}>
+              {depTask ? (
+                <>
+                  <span className="font-medium">{depTask.name}</span> –{" "}
+                  <StatusBadge status={depTask.status} />
+                </>
+              ) : (
+                <span className="text-gray-500 italic">
+                  Tâche #{depId} introuvable
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}

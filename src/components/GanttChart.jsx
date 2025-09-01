@@ -148,6 +148,7 @@ function GanttChart({
       <TaskDetailsModal
         isOpen={!!detailsTask}
         task={detailsTask}
+        allTasks={tasks}
         onClose={() => setDetailsTask(null)}
       />
     </div>
