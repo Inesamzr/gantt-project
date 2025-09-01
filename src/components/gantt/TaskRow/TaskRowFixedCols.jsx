@@ -45,17 +45,17 @@ function TaskRowFixedCols({
       </div>
 
       {/* Assignée */}
-      <div className="h-8 bg-white flex items-center px-2 text-sm truncate">
+      <div className="h-8 bg-white flex items-center text-sm truncate px-1">
         {task.assignedTo || "—"}
       </div>
 
       {/* Date début */}
-      <div className="h-8 bg-white flex items-center px-2 text-sm">
+      <div className="h-8 bg-white flex items-center text-sm px-1">
         {start.toLocaleDateString("fr-FR")}
       </div>
 
       {/* Durée */}
-      <div className="h-8 bg-white flex items-center justify-center text-sm">
+      <div className="h-8 bg-white flex items-center justify-center text-sm px-1">
         {duration} j
       </div>
 

@@ -30,7 +30,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
           <div className="h-8 flex items-center">Assignée à</div>
           <div className="h-8 flex items-center">Date début</div>
           <div className="h-8 flex items-center">Durée</div>
-          <div className="h-8 flex items-center justify-center pr-4">
+          <div className="h-8 flex items-center justify-end px-5">
             <button
               onClick={onAddClick}
               className="w-7 h-7 rounded-full bg-white text-primary-blue flex items-center justify-center"
