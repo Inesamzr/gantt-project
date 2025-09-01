@@ -5,7 +5,7 @@ import useWorkingDays from "../hooks/useWorkingDays";
 import { addChildRecursive } from "../hooks/useTaskHierarchy";
 
 import TimeHeader from "./TimeHeader";
-import TaskRow from "./TaskRow";
+import TaskRow from "./TaskRow/TaskRow";
 import TaskModal from "./TaskModal";
 import TaskDetailsModal from "./TaskDetailsModal";
 
