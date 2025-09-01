@@ -57,7 +57,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
         {days.map((day) => (
           <div
             key={day.key}
-            className="h-10 flex items-center justify-center rounded bg-background-label text-secondary-gray font-semibold"
+            className="h-10 flex items-center justify-center bg-background-label text-secondary-gray font-semibold"
           >
             {day.label}
           </div>

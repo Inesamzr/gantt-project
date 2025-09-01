@@ -18,23 +18,25 @@ function DependenciesLayer({ tasks, taskPositions }) {
               d={`M${startX},${startY} C${startX + 40},${startY} ${
                 endX - 40
               },${endY} ${endX},${endY}`}
-              stroke="gray"
+              stroke="orange"
+              strokeWidth={2.5}
               fill="none"
               markerEnd="url(#arrowhead)"
             />
           );
         })
       )}
+
       <defs>
         <marker
           id="arrowhead"
-          markerWidth="10"
-          markerHeight="7"
-          refX="10"
-          refY="3.5"
+          markerWidth="4"
+          markerHeight="4"
+          refX="4"
+          refY="2"
           orient="auto"
         >
-          <polygon points="0 0, 10 3.5, 0 7" fill="gray" />
+          <polygon points="0 0, 4 2, 0 4" fill="orange" />
         </marker>
       </defs>
     </svg>
