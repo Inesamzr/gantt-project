@@ -33,16 +33,16 @@ export const tasks = [
     type: "analyse",
     assignedTo: "ines",
     start: "2025-08-16",
-    end: "2025-08-19",
+    end: "2025-08-20",
     status: "terminée",
     children: [
       {
         id: "1.1",
-        name: "Spécifications techniques",
-        type: "conception",
+        name: "Cahier des charges",
+        type: "analyse",
         assignedTo: "yassine",
-        start: "2025-08-20",
-        end: "2025-08-23",
+        start: "2025-08-19",
+        end: "2025-08-20",
         status: "terminée",
         description: "Rédaction des spécifications techniques détaillées.",
         children: [],
@@ -52,6 +52,17 @@ export const tasks = [
   },
   {
     id: 2,
+    name: "Spécifications techniques",
+    type: "conception",
+    assignedTo: "yassine",
+    start: "2025-08-20",
+    end: "2025-08-23",
+    status: "terminée",
+    description: "Rédaction des spécifications techniques détaillées.",
+    children: [],
+  },
+  {
+    id: 3,
     name: "Maquettage UI/UX",
     type: "conception",
     assignedTo: "thomas",
@@ -61,19 +72,19 @@ export const tasks = [
     description: "Création des maquettes et parcours utilisateurs.",
   },
   {
-    id: 3,
+    id: 4,
     name: "Développement API utilisateur",
     type: "dev",
     assignedTo: "back",
     start: "2025-08-27",
     end: "2025-09-04",
     status: "en cours",
-    dependencies: [2],
+    dependencies: [3],
     description:
       "Développement des endpoints pour la gestion des utilisateurs.",
   },
   {
-    id: 4,
+    id: 5,
     name: "Développement interface inscription",
     type: "dev",
     assignedTo: "ines",
@@ -84,7 +95,7 @@ export const tasks = [
       "Intégration de l’interface d’inscription selon les maquettes UX.",
   },
   {
-    id: 5,
+    id: 6,
     name: "Revue de code backend",
     type: "revue",
     assignedTo: "yassine",
@@ -95,7 +106,7 @@ export const tasks = [
       "Vérification du code backend : structure, sécurité, performances.",
   },
   {
-    id: 6,
+    id: 7,
     name: "Intégration front/back",
     type: "intégration",
     assignedTo: "fullstack",
@@ -105,7 +116,7 @@ export const tasks = [
     description: "Connexion entre les interfaces frontend et l’API.",
   },
   {
-    id: 7,
+    id: 8,
     name: "Tests fonctionnels",
     type: "test",
     assignedTo: "sarah",
@@ -115,7 +126,7 @@ export const tasks = [
     description: "Validation fonctionnelle des flux utilisateur clés.",
   },
   {
-    id: 8,
+    id: 9,
     name: "Correctifs post-tests",
     type: "correctif",
     assignedTo: "dev",
@@ -125,7 +136,7 @@ export const tasks = [
     description: "Correction des anomalies détectées durant les tests.",
   },
   {
-    id: 9,
+    id: 10,
     name: "Recette client",
     type: "recette",
     assignedTo: "julie",
@@ -135,7 +146,7 @@ export const tasks = [
     description: "Présentation du livrable au client pour validation.",
   },
   {
-    id: 10,
+    id: 11,
     name: "Documentation technique",
     type: "documentation",
     assignedTo: "yassine",
@@ -146,7 +157,7 @@ export const tasks = [
       "Rédaction des documentations techniques pour maintenance et transfert.",
   },
   {
-    id: 11,
+    id: 12,
     name: "Formation client",
     type: "formation",
     assignedTo: "thomas",
@@ -157,7 +168,7 @@ export const tasks = [
       "Session de formation pour la prise en main de l’outil par le client.",
   },
   {
-    id: 12,
+    id: 13,
     name: "Livraison production",
     type: "livraison",
     assignedTo: "fullstack",
@@ -167,7 +178,7 @@ export const tasks = [
     description: "Déploiement en production et mise en ligne officielle.",
   },
   {
-    id: 13,
+    id: 14,
     name: "Suivi post-livraison",
     type: "maintenance",
     assignedTo: "sarah",

@@ -6,6 +6,25 @@ import CustomSelect from "./CustomSelect";
 function TaskForm({ task, parentTask, form, onClose, onSave }) {
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const childStart = new Date(form.startDate);
+    const childEnd = new Date(form.calculateEndDate());
+
+    if (parentTask) {
+      const parentStart = new Date(parentTask.start);
+      const parentEnd = new Date(parentTask.end);
+
+      // Vérification des bornes
+      if (childStart < parentStart || childEnd > parentEnd) {
+        alert(
+          `❌ La sous-tâche doit être comprise entre le ${parentStart.toLocaleDateString(
+            "fr-FR"
+          )} et le ${parentEnd.toLocaleDateString("fr-FR")}`
+        );
+        return; // on bloque la sauvegarde
+      }
+    }
+
     const updatedTask = {
       ...task,
       id: task ? task.id : Date.now(),
@@ -17,6 +36,7 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
       start: form.startDate,
       end: form.calculateEndDate(),
     };
+
     onSave(updatedTask);
     onClose();
   };
