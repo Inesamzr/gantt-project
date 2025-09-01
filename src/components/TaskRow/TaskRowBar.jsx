@@ -41,28 +41,19 @@ function TaskRowBar({
       className="relative grid gap-[4px]"
       style={{ gridTemplateColumns: `repeat(${totalDays}, 40px)` }}
     >
-      {task.duration === 0 ? (
-        <div
-          ref={barRef}
-          className="absolute w-4 h-4 rotate-45 bg-purple-500"
-          style={{ left: `${visibleOffset * 44 + 20}px`, top: "6px" }}
-          title={`Jalon : ${task.name}`}
-        />
-      ) : (
-        <div
-          ref={barRef}
-          className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
-          style={{
-            left: `${visibleOffset * 44}px`,
-            width: `${visibleDuration * 44 - 7}px`,
-            backgroundColor:
-              typeColors[task.type] || "var(--color-primary-orange)",
-          }}
-          title={task.name}
-        >
-          <span className="truncate whitespace-nowrap">{task.name}</span>
-        </div>
-      )}
+      <div
+        ref={barRef}
+        className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
+        style={{
+          left: `${visibleOffset * 44}px`,
+          width: `${visibleDuration * 44 - 7}px`,
+          backgroundColor:
+            typeColors[task.type] || "var(--color-primary-orange)",
+        }}
+        title={task.name}
+      >
+        <span className="truncate whitespace-nowrap">{task.name}</span>
+      </div>
 
       {workingDays.map((day, i) => {
         const today = new Date();
