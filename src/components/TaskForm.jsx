@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { persons, taskTypes, tasks } from "../data/tasks";
 import StatusSelect from "./StatusSelect";
 import CustomSelect from "./CustomSelect";
+import WarningModal from "./WarningModal";
 
 function TaskForm({ task, parentTask, form, onClose, onSave }) {
+  const [warningMessage, setWarningMessage] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -15,8 +19,8 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
       const parentEnd = new Date(parentTask.end);
 
       if (childStart < parentStart || childEnd > parentEnd) {
-        alert(
-          `❌ La sous-tâche doit être comprise entre le ${parentStart.toLocaleDateString(
+        setWarningMessage(
+          `La sous-tâche doit être comprise entre le ${parentStart.toLocaleDateString(
             "fr-FR"
           )} et le ${parentEnd.toLocaleDateString("fr-FR")}`
         );
@@ -34,190 +38,206 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
       description: form.description,
       start: form.startDate,
       end: form.calculateEndDate(),
-      dependencies: form.dependencies, // ✅ inclure les dépendances
+      dependencies: form.dependencies,
     };
 
     onSave(updatedTask);
 
-    // ✅ Vérification : est-ce que localStorage est bien mis à jour ?
+    // Vérification localStorage
     const stored = JSON.parse(localStorage.getItem("tasks") || "[]");
     const exists = stored.some((t) => t.id === updatedTask.id);
     if (!exists) {
-      alert(
+      setWarningMessage(
         "⚠️ Le diagramme n'est pas à jour : pensez à rafraîchir ou à vérifier la sauvegarde."
       );
+      return;
     }
 
     onClose();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 p-6">
-      {/* Nom */}
-      <div>
-        <label className="block text-sm mb-1 font-bold">
-          Nom<span className="text-primary-orange">*</span>
-        </label>
-        <input
-          type="text"
-          value={form.name}
-          onChange={(e) => form.setName(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
-          placeholder="Nom de la tâche"
-          required
+    <>
+      {warningMessage ? (
+        <WarningModal
+          message={warningMessage}
+          onClose={() => setWarningMessage("")}
         />
-      </div>
-
-      {/* Assignation + État */}
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-bold mb-1">Assignation</label>
-          <CustomSelect
-            options={persons.map((p) => p.name)}
-            allowEmpty
-            emptyLabel="Vide"
-            value={form.assignedTo}
-            onChange={form.setAssignedTo}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold mb-1">
-            État<span className="text-primary-orange">*</span>
-          </label>
-          <StatusSelect
-            value={form.status}
-            onChange={form.setStatus}
-            defaultValue="à faire"
-          />
-        </div>
-      </div>
-
-      {/* Type */}
-      <div>
-        <label className="block text-sm font-bold mb-1">Type de tâche</label>
-        <CustomSelect
-          options={taskTypes.map((t) => t.charAt(0).toUpperCase() + t.slice(1))}
-          allowEmpty
-          emptyLabel="Vide"
-          value={form.type}
-          onChange={form.setType}
-        />
-      </div>
-
-      {/* Description */}
-      <div>
-        <label className="block text-sm font-bold mb-1">Description</label>
-        <textarea
-          value={form.description}
-          onChange={(e) => form.setDescription(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
-          rows="3"
-        />
-      </div>
-
-      {/* Date + Durée */}
-      <div>
-        <label className="block text-sm font-bold mb-1">
-          Date de début<span className="text-primary-orange">*</span>
-        </label>
-        <div className="flex items-center gap-3">
-          <input
-            type="date"
-            value={form.startDate}
-            onChange={(e) => form.setStartDate(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
-            required
-          />
-
-          {/* Durée */}
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => form.setDuration((d) => Math.max(1, d - 1))}
-              className="px-1 py-1 rounded-full hover:bg-primary-orange bg-primary-blue"
-            >
-              <Icon icon="mdi:minus" width="20" className="text-white" />
-            </button>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-5 p-6">
+          {/* Nom */}
+          <div>
+            <label className="block text-sm mb-1 font-bold">
+              Nom<span className="text-primary-orange">*</span>
+            </label>
             <input
-              type="number"
-              value={form.duration}
-              onChange={(e) =>
-                form.setDuration(Math.max(1, Number(e.target.value)))
-              }
-              className="w-16 text-center border border-gray-300 rounded"
+              type="text"
+              value={form.name}
+              onChange={(e) => form.setName(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
+              placeholder="Nom de la tâche"
+              required
             />
-            <button
-              type="button"
-              onClick={() => form.setDuration((d) => d + 1)}
-              className="px-1 py-1 rounded-full hover:bg-primary-orange bg-primary-blue"
-            >
-              <Icon icon="mdi:plus" width="20" className="text-white" />
-            </button>
           </div>
 
-          <span className="text-gray-500 text-sm">
-            Jours ({form.calculateEndDate()})
-          </span>
-        </div>
-      </div>
-
-      {/* Dépendances */}
-      <div>
-        <label className="block text-sm font-bold mb-1">Dépendances</label>
-        <div className="space-y-1 border rounded p-2 max-h-40 overflow-y-auto">
-          {tasks.map((t) => (
-            <label key={t.id} className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.dependencies.includes(t.id)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    form.setDependencies([...form.dependencies, t.id]);
-                  } else {
-                    form.setDependencies(
-                      form.dependencies.filter((d) => d !== t.id)
-                    );
-                  }
-                }}
+          {/* Assignation + État */}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-bold mb-1">
+                Assignation
+              </label>
+              <CustomSelect
+                options={persons.map((p) => p.name)}
+                allowEmpty
+                emptyLabel="Vide"
+                value={form.assignedTo}
+                onChange={form.setAssignedTo}
               />
-              {t.name}
+            </div>
+            <div>
+              <label className="block text-sm font-bold mb-1">
+                État<span className="text-primary-orange">*</span>
+              </label>
+              <StatusSelect
+                value={form.status}
+                onChange={form.setStatus}
+                defaultValue="à faire"
+              />
+            </div>
+          </div>
+
+          {/* Type */}
+          <div>
+            <label className="block text-sm font-bold mb-1">
+              Type de tâche
             </label>
-          ))}
-        </div>
-      </div>
+            <CustomSelect
+              options={taskTypes.map(
+                (t) => t.charAt(0).toUpperCase() + t.slice(1)
+              )}
+              allowEmpty
+              emptyLabel="Vide"
+              value={form.type}
+              onChange={form.setType}
+            />
+          </div>
 
-      {/* Actions */}
-      <div className="flex justify-between gap-3 pt-4">
-        <div className="flex gap-3">
-          {task && (
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-bold mb-1">Description</label>
+            <textarea
+              value={form.description}
+              onChange={(e) => form.setDescription(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
+              rows="3"
+            />
+          </div>
+
+          {/* Date + Durée */}
+          <div>
+            <label className="block text-sm font-bold mb-1">
+              Date de début<span className="text-primary-orange">*</span>
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="date"
+                value={form.startDate}
+                onChange={(e) => form.setStartDate(e.target.value)}
+                className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-blue"
+                required
+              />
+
+              {/* Durée */}
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => form.setDuration((d) => Math.max(1, d - 1))}
+                  className="px-1 py-1 rounded-full hover:bg-primary-orange bg-primary-blue"
+                >
+                  <Icon icon="mdi:minus" width="20" className="text-white" />
+                </button>
+                <input
+                  type="number"
+                  value={form.duration}
+                  onChange={(e) =>
+                    form.setDuration(Math.max(1, Number(e.target.value)))
+                  }
+                  className="w-16 text-center border border-gray-300 rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => form.setDuration((d) => d + 1)}
+                  className="px-1 py-1 rounded-full hover:bg-primary-orange bg-primary-blue"
+                >
+                  <Icon icon="mdi:plus" width="20" className="text-white" />
+                </button>
+              </div>
+
+              <span className="text-gray-500 text-sm">
+                Jours ({form.calculateEndDate()})
+              </span>
+            </div>
+          </div>
+
+          {/* Dépendances */}
+          <div>
+            <label className="block text-sm font-bold mb-1">Dépendances</label>
+            <div className="space-y-1 border rounded p-2 max-h-40 overflow-y-auto">
+              {tasks.map((t) => (
+                <label key={t.id} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={form.dependencies.includes(t.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        form.setDependencies([...form.dependencies, t.id]);
+                      } else {
+                        form.setDependencies(
+                          form.dependencies.filter((d) => d !== t.id)
+                        );
+                      }
+                    }}
+                  />
+                  {t.name}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-between gap-3 pt-4">
+            <div className="flex gap-3">
+              {task && (
+                <button
+                  type="button"
+                  onClick={() => form.setConfirmDelete(true)}
+                  className="flex items-center gap-1 px-3 py-2 bg-error text-white rounded hover:bg-red-600 font-semibold"
+                >
+                  <Icon icon="mdi:trash" width="20" />
+                  Supprimer
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex items-center gap-1 px-3 py-2 bg-annuler text-white rounded hover:bg-gray-400 font-semibold"
+              >
+                <Icon icon="material-symbols:cancel" width="20" />
+                Annuler
+              </button>
+            </div>
+
             <button
-              type="button"
-              onClick={() => form.setConfirmDelete(true)}
-              className="flex items-center gap-1 px-3 py-2 bg-error text-white rounded hover:bg-red-600 font-semibold"
+              type="submit"
+              className="flex items-center gap-1 px-3 py-2 bg-success text-white rounded hover:bg-green-600 font-semibold"
             >
-              <Icon icon="mdi:trash" width="20" />
-              Supprimer
+              <Icon icon="el:ok-sign" width="20" />
+              Sauvegarder
             </button>
-          )}
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex items-center gap-1 px-3 py-2 bg-annuler text-white rounded hover:bg-gray-400 font-semibold"
-          >
-            <Icon icon="material-symbols:cancel" width="20" />
-            Annuler
-          </button>
-        </div>
-
-        <button
-          type="submit"
-          className="flex items-center gap-1 px-3 py-2 bg-success text-white rounded hover:bg-green-600 font-semibold"
-        >
-          <Icon icon="el:ok-sign" width="20" />
-          Sauvegarder
-        </button>
-      </div>
-    </form>
+          </div>
+        </form>
+      )}
+    </>
   );
 }
 
