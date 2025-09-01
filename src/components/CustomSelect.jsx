@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { useCustomSelect } from "../hooks/useCustomSelect";
+import CustomSelectOption from "./CustomSelectOption";
 
 function CustomSelect({
   options,
@@ -8,25 +9,20 @@ function CustomSelect({
   value,
   onChange,
 }) {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(allowEmpty ? "" : options[0]);
-
-  useEffect(() => {
-    setSelected(value || (allowEmpty ? "" : options[0]));
-  }, [value, options, allowEmpty]);
-
-  const handleSelect = (value) => {
-    setSelected(value);
-    setOpen(false);
-    if (onChange) onChange(value);
-  };
+  const { open, selected, toggleOpen, handleSelect } = useCustomSelect({
+    value,
+    options,
+    allowEmpty,
+    emptyLabel,
+    onChange,
+  });
 
   return (
     <div className="relative w-full">
       {/* Bouton principal */}
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={toggleOpen}
         className="flex items-center justify-between w-full h-10 border border-gray-300 rounded px-3 bg-white"
       >
         <span>{selected === "" ? emptyLabel : selected}</span>
@@ -37,21 +33,19 @@ function CustomSelect({
       {open && (
         <div className="absolute mt-1 w-full bg-white border rounded shadow-lg z-50 overflow-hidden">
           {allowEmpty && (
-            <div
-              onClick={() => handleSelect("")}
-              className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-            >
-              {emptyLabel}
-            </div>
+            <CustomSelectOption
+              value=""
+              label={emptyLabel}
+              onSelect={handleSelect}
+            />
           )}
           {options.map((opt) => (
-            <div
+            <CustomSelectOption
               key={opt}
-              onClick={() => handleSelect(opt)}
-              className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-            >
-              {opt}
-            </div>
+              value={opt}
+              label={opt}
+              onSelect={handleSelect}
+            />
           ))}
         </div>
       )}
