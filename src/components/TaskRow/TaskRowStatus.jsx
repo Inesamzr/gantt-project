@@ -11,7 +11,7 @@ function TaskRowStatus({ task, onChangeStatus }) {
     >
       {task.status === "terminée" && (
         <div
-          className="w-[40px] h-8 flex items-center justify-center rounded"
+          className="w-[40px] h-8 flex items-center justify-center"
           style={{ backgroundColor: "var(--status-bg-success)" }}
         >
           <Icon
@@ -23,7 +23,7 @@ function TaskRowStatus({ task, onChangeStatus }) {
       )}
       {task.status === "en cours" && (
         <div
-          className="w-[40px] h-8 flex items-center justify-center rounded"
+          className="w-[40px] h-8 flex items-center justify-center"
           style={{ backgroundColor: "var(--status-bg-progress)" }}
         >
           <Icon
@@ -35,7 +35,7 @@ function TaskRowStatus({ task, onChangeStatus }) {
       )}
       {task.status === "à faire" && (
         <div
-          className="w-[40px] h-8 flex items-center justify-center rounded"
+          className="w-[40px] h-8 flex items-center justify-center"
           style={{ backgroundColor: "var(--status-bg-todo)" }}
         >
           <Icon
