@@ -1,13 +1,34 @@
+import { useEffect, useRef } from "react";
 import { typeColors } from "../../config/colors";
 import {
   countWorkingDaysBetween,
   getWorkingDays,
 } from "../../hooks/useWorkingDaysTaskRow";
 
-function TaskRowBar({ task, ganttStart, start, end, totalDays }) {
+function TaskRowBar({
+  task,
+  ganttStart,
+  start,
+  end,
+  totalDays,
+  registerPosition,
+  refreshKey,
+}) {
+  const barRef = useRef(null);
   const workingDays = getWorkingDays(ganttStart, totalDays);
   const offset = countWorkingDaysBetween(ganttStart, start);
   const endOffset = countWorkingDaysBetween(ganttStart, end);
+
+  useEffect(() => {
+    if (!barRef.current) return;
+    const rect = barRef.current.getBoundingClientRect();
+    registerPosition(task.id, {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    });
+  }, [task.id, registerPosition, refreshKey]);
 
   if (endOffset < 0 || offset > totalDays - 1) return null;
 
@@ -20,18 +41,28 @@ function TaskRowBar({ task, ganttStart, start, end, totalDays }) {
       className="relative grid gap-[4px]"
       style={{ gridTemplateColumns: `repeat(${totalDays}, 40px)` }}
     >
-      <div
-        className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
-        style={{
-          left: `${visibleOffset * 44}px`,
-          width: `${visibleDuration * 44 - 7}px`,
-          backgroundColor:
-            typeColors[task.type] || "var(--color-primary-orange)",
-        }}
-        title={task.name}
-      >
-        <span className="truncate whitespace-nowrap">{task.name}</span>
-      </div>
+      {task.duration === 0 ? (
+        <div
+          ref={barRef}
+          className="absolute w-4 h-4 rotate-45 bg-purple-500"
+          style={{ left: `${visibleOffset * 44 + 20}px`, top: "6px" }}
+          title={`Jalon : ${task.name}`}
+        />
+      ) : (
+        <div
+          ref={barRef}
+          className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
+          style={{
+            left: `${visibleOffset * 44}px`,
+            width: `${visibleDuration * 44 - 7}px`,
+            backgroundColor:
+              typeColors[task.type] || "var(--color-primary-orange)",
+          }}
+          title={task.name}
+        >
+          <span className="truncate whitespace-nowrap">{task.name}</span>
+        </div>
+      )}
 
       {workingDays.map((day, i) => {
         const today = new Date();

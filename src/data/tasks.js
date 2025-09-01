@@ -68,6 +68,7 @@ export const tasks = [
     start: "2025-08-27",
     end: "2025-09-04",
     status: "en cours",
+    dependencies: [2],
     description:
       "Développement des endpoints pour la gestion des utilisateurs.",
   },

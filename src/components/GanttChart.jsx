@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { ganttConfig } from "../config/gantt";
 import useTaskFilters from "../hooks/useTaskFilters";
 import useWorkingDays from "../hooks/useWorkingDays";
@@ -8,6 +8,7 @@ import TimeHeader from "./TimeHeader";
 import TaskRow from "./TaskRow/TaskRow";
 import TaskModal from "./TaskModal";
 import TaskDetailsModal from "./TaskDetailsModal";
+import DependenciesLayer from "./TaskRow/DependenciesLayer";
 
 function GanttChart({
   tasks,
@@ -21,6 +22,23 @@ function GanttChart({
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [parentForChild, setParentForChild] = useState(null);
   const [detailsTask, setDetailsTask] = useState(null);
+  const [taskPositions, setTaskPositions] = useState({});
+  const [refreshKey, setRefreshKey] = useState(0);
+  const canvasRef = useRef(null);
+
+  const registerPosition = useCallback((taskId, rect) => {
+    const base = canvasRef.current?.getBoundingClientRect();
+    if (!base) return;
+    setTaskPositions((prev) => ({
+      ...prev,
+      [taskId]: {
+        x: rect.left - base.left,
+        y: rect.top - base.top,
+        width: rect.width,
+        height: rect.height,
+      },
+    }));
+  }, []);
 
   const toggleTaskOpen = (taskId) => {
     setOpenedTasks((prev) =>
@@ -28,6 +46,7 @@ function GanttChart({
         ? prev.filter((id) => id !== taskId)
         : [...prev, taskId]
     );
+    setRefreshKey((k) => k + 1);
   };
 
   const openAddModal = () => {
@@ -91,23 +110,30 @@ function GanttChart({
           />
         </div>
 
-        {/* Body */}
-        <div className="flex flex-col gap-y-[4px]">
-          {filteredTasks.map((task, index) => (
-            <TaskRow
-              key={task.id}
-              task={task}
-              rowNumber={index + 1}
-              totalDays={totalDays}
-              ganttStartDate={ganttConfig.startDate}
-              openedTasks={openedTasks}
-              toggleOpen={toggleTaskOpen}
-              onEdit={() => openEditModal(task)}
-              onAddChild={openAddChildModal}
-              onChangeStatus={onAddTask}
-              onViewDetails={(task) => setDetailsTask(task)}
-            />
-          ))}
+        <div ref={canvasRef} className="relative">
+          <div className="flex flex-col gap-y-[4px]">
+            {filteredTasks.map((task, index) => (
+              <TaskRow
+                key={task.id}
+                task={task}
+                rowNumber={index + 1}
+                totalDays={totalDays}
+                ganttStartDate={ganttConfig.startDate}
+                openedTasks={openedTasks}
+                toggleOpen={toggleTaskOpen}
+                onEdit={() => openEditModal(task)}
+                onAddChild={openAddChildModal}
+                onChangeStatus={onAddTask}
+                onViewDetails={(task) => setDetailsTask(task)}
+                registerPosition={registerPosition}
+                refreshKey={refreshKey}
+              />
+            ))}
+          </div>
+          <DependenciesLayer
+            tasks={filteredTasks}
+            taskPositions={taskPositions}
+          />
         </div>
       </div>
 

@@ -13,6 +13,8 @@ function TaskRow({
   onViewDetails,
   onAddChild,
   onChangeStatus,
+  registerPosition,
+  refreshKey,
   level = 0,
 }) {
   const isOpen = openedTasks.includes(task.id);
@@ -47,6 +49,8 @@ function TaskRow({
           start={start}
           end={end}
           totalDays={totalDays}
+          registerPosition={registerPosition}
+          refreshKey={refreshKey}
         />
 
         <TaskRowStatus task={task} onChangeStatus={onChangeStatus} />
@@ -67,6 +71,8 @@ function TaskRow({
               onViewDetails={onViewDetails}
               onAddChild={onAddChild}
               onChangeStatus={onChangeStatus}
+              registerPosition={registerPosition}
+              refreshKey={refreshKey}
               level={level + 1}
             />
           ))}
