@@ -1,54 +1,9 @@
 import { Icon } from "@iconify/react";
+import { COLS, LEFT_WIDTH } from "../config/columns";
+import useCalendar from "../hooks/useCalendar";
 
 function TimeHeader({ startDate, endDate, onAddClick }) {
-  const COLS = {
-    id: 40,
-    name: 300,
-    assignee: 170,
-    start: 150,
-    duration: 70,
-    actions: 80,
-  };
-
-  const LEFT_WIDTH =
-    COLS.name + COLS.assignee + COLS.start + COLS.duration + COLS.actions;
-
-  const days = [];
-  const weeks = [];
-  const current = new Date(startDate);
-  const end = new Date(endDate);
-
-  while (current <= end) {
-    const weekDays = [];
-    for (let d = 0; d < 7 && current <= end; d++) {
-      const dow = current.getDay(); // 1..5 = LUN..VEN
-      if (dow >= 1 && dow <= 5) {
-        weekDays.push({
-          key: current.toISOString(),
-          label: current
-            .toLocaleDateString("fr-FR", { weekday: "short" })
-            .toUpperCase(),
-          date: new Date(current),
-        });
-      }
-      current.setDate(current.getDate() + 1);
-    }
-    if (weekDays.length > 0) {
-      const firstDate = weekDays[0].date.toLocaleDateString("fr-FR", {
-        day: "2-digit",
-        month: "short",
-      });
-      const lastDate = weekDays[weekDays.length - 1].date.toLocaleDateString(
-        "fr-FR",
-        { day: "2-digit", month: "short" }
-      );
-      weeks.push({
-        label: `${firstDate} – ${lastDate}`,
-        span: weekDays.length,
-      });
-      days.push(...weekDays);
-    }
-  }
+  const { days, weeks } = useCalendar(startDate, endDate);
 
   return (
     <div className="mb-[4px]">
@@ -62,7 +17,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
         {/* Colonne ID (vide, collée à gauche) */}
         <div className="row-span-2 bg-transparent" />
 
-        {/* En-tête des colonnes fixes (Nom, Assignée à, Date début, Durée, +) */}
+        {/* En-tête des colonnes fixes */}
         <div
           className="flex items-center justify-between row-span-2 bg-primary-blue text-white font-semibold rounded-t-xl"
           style={{
@@ -71,14 +26,14 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
             gap: "4px",
           }}
         >
-          <div className="h-8 flex items-center leading-non px-2">Nom</div>
-          <div className="h-8 flex items-center leading-non">Assignée à</div>
-          <div className="h-8 flex items-center leading-non">Date début</div>
-          <div className="h-8 flex items-center leading-non">Durée</div>
+          <div className="h-8 flex items-center px-2">Nom</div>
+          <div className="h-8 flex items-center">Assignée à</div>
+          <div className="h-8 flex items-center">Date début</div>
+          <div className="h-8 flex items-center">Durée</div>
           <div className="h-8 flex items-center justify-center pr-4">
             <button
               onClick={onAddClick}
-              className="w-7 h-7 rounded-full bg-white text-primary-blue text-sm font-bold flex items-center justify-center"
+              className="w-7 h-7 rounded-full bg-white text-primary-blue flex items-center justify-center"
               title="Ajouter une tâche"
             >
               <Icon icon="mdi:plus" width="20" />
@@ -90,14 +45,15 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
         {weeks.map((week, i) => (
           <div
             key={i}
-            className="h-8 flex items-center justify-center bg-primary-blue text-white rounded-t-xl font-bold"
+            className="h-8 flex items-center justify-center bg-primary-blue text-white rounded-t-xl font-bold px-1 truncate"
             style={{ gridColumn: `span ${week.span}` }}
+            title={week.label}
           >
             {week.label}
           </div>
         ))}
 
-        {/* Jours (LUN..VEN) */}
+        {/* Jours */}
         {days.map((day) => (
           <div
             key={day.key}
