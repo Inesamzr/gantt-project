@@ -7,7 +7,7 @@ export function useCustomSelect({
   value,
   options,
   allowEmpty,
-  emptyLabel,
+  //emptyLabel,
   onChange,
 }) {
   const [open, setOpen] = useState(false);
