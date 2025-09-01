@@ -1,3 +1,8 @@
+/**
+ * Hook qui génère les jours et semaines d’un calendrier
+ * entre deux dates données (uniquement du lundi au vendredi).
+ * Fournit des libellés longs (ex: "29 août – 02 sept.") ou courts (ex: "29–30").
+ */
 export default function useCalendar(startDate, endDate) {
   const days = [];
   const weeks = [];

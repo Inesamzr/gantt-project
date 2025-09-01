@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { statuses } from "../../data/tasks";
 
+/**
+ * Hook qui gère la logique de sélection d’un statut
+ */
 export function useStatusSelect(value, defaultValue = "à faire") {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(defaultValue);

@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 import { countWorkingDaysBetween } from "./useWorkingDaysTaskRow";
 
+/**
+ * Hook qui calcule la position et la visibilité d’une barre de tâche
+ * dans le diagramme de Gantt, et enregistre ses coordonnées à l’écran.
+ */
 export function useTaskBarPosition({
   task,
   ganttStart,

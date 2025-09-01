@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+/**
+ * Hook qui gère la validation et la soumission du formulaire de tâche
+ */
 export function useTaskFormValidation({
   task,
   parentTask,

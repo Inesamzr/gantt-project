@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+/**
+ * Hook qui gère la logique et l’état d’un formulaire de tâche
+ */
 export default function useTaskForm(task, isOpen) {
   const [name, setName] = useState("");
   const [assignedTo, setAssignedTo] = useState("");

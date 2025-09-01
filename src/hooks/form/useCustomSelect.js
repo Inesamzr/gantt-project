@@ -3,13 +3,7 @@ import { useState, useEffect } from "react";
 /**
  * Hook qui gère la logique de sélection personnalisée
  */
-export function useCustomSelect({
-  value,
-  options,
-  allowEmpty,
-  //emptyLabel,
-  onChange,
-}) {
+export function useCustomSelect({ value, options, allowEmpty, onChange }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(allowEmpty ? "" : options[0]);
 

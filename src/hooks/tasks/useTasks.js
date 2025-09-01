@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { tasks } from "../../data/tasks";
 
+/**
+ * Hook qui gère la liste des tâches avec persistance dans localStorage
+ * et propose une fonction pour ajouter, mettre à jour ou supprimer une tâche.
+ */
 export default function useTasks(showToast) {
   const [taskList, setTaskList] = useState([]);
 

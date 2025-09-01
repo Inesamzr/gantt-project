@@ -1,3 +1,7 @@
+/**
+ * Hook qui calcule le nombre de jours ouvrés (lundi à vendredi)
+ * entre deux dates incluses.
+ */
 export default function useWorkingDays(start, end) {
   const startDate = new Date(start);
   const endDate = new Date(end);

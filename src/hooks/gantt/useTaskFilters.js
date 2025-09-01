@@ -1,5 +1,10 @@
 import { useMemo } from "react";
 
+/**
+ * Hook qui applique les filtres (assignation, statut, type)
+ * et gère l’affichage conditionnel des sous-tâches
+ * selon que leurs parents sont ouverts ou non.
+ */
 export default function useTaskFilters(
   tasks,
   { assignedToFilter, statusFilter, typeFilter, openedTasks }

@@ -1,3 +1,6 @@
+/**
+ * Calcule le nombre de jours ouvrés (lundi à vendredi) entre deux dates.
+ */
 export function countWorkingDaysBetween(sDate, eDate) {
   const s = new Date(sDate);
   const e = new Date(eDate);
@@ -10,6 +13,10 @@ export function countWorkingDaysBetween(sDate, eDate) {
   return count;
 }
 
+/**
+ * Génère un tableau des jours ouvrés à partir d’une date donnée,
+ * limité à un nombre total de jours ouvrés.
+ */
 export function getWorkingDays(startDate, total) {
   const out = [];
   const cur = new Date(startDate);
