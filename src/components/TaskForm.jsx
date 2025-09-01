@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { persons, taskTypes } from "../data/tasks";
+import { persons, taskTypes, tasks } from "../data/tasks";
 import StatusSelect from "./StatusSelect";
 import CustomSelect from "./CustomSelect";
 
@@ -14,14 +14,13 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
       const parentStart = new Date(parentTask.start);
       const parentEnd = new Date(parentTask.end);
 
-      // Vérification des bornes
       if (childStart < parentStart || childEnd > parentEnd) {
         alert(
           `❌ La sous-tâche doit être comprise entre le ${parentStart.toLocaleDateString(
             "fr-FR"
           )} et le ${parentEnd.toLocaleDateString("fr-FR")}`
         );
-        return; // on bloque la sauvegarde
+        return;
       }
     }
 
@@ -35,9 +34,20 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
       description: form.description,
       start: form.startDate,
       end: form.calculateEndDate(),
+      dependencies: form.dependencies, // ✅ inclure les dépendances
     };
 
     onSave(updatedTask);
+
+    // ✅ Vérification : est-ce que localStorage est bien mis à jour ?
+    const stored = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const exists = stored.some((t) => t.id === updatedTask.id);
+    if (!exists) {
+      alert(
+        "⚠️ Le diagramme n'est pas à jour : pensez à rafraîchir ou à vérifier la sauvegarde."
+      );
+    }
+
     onClose();
   };
 
@@ -148,6 +158,31 @@ function TaskForm({ task, parentTask, form, onClose, onSave }) {
           <span className="text-gray-500 text-sm">
             Jours ({form.calculateEndDate()})
           </span>
+        </div>
+      </div>
+
+      {/* Dépendances */}
+      <div>
+        <label className="block text-sm font-bold mb-1">Dépendances</label>
+        <div className="space-y-1 border rounded p-2 max-h-40 overflow-y-auto">
+          {tasks.map((t) => (
+            <label key={t.id} className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.dependencies.includes(t.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    form.setDependencies([...form.dependencies, t.id]);
+                  } else {
+                    form.setDependencies(
+                      form.dependencies.filter((d) => d !== t.id)
+                    );
+                  }
+                }}
+              />
+              {t.name}
+            </label>
+          ))}
         </div>
       </div>
 

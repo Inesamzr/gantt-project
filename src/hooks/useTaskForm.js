@@ -9,6 +9,7 @@ export default function useTaskForm(task, isOpen) {
   const [startDate, setStartDate] = useState("2025-09-10");
   const [duration, setDuration] = useState(1);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [dependencies, setDependencies] = useState([]);
 
   useEffect(() => {
     if (task) {
@@ -18,6 +19,7 @@ export default function useTaskForm(task, isOpen) {
       setType(task.type || "");
       setDescription(task.description || "");
       setStartDate(task.start || "2025-09-10");
+      setDependencies(task.dependencies || []);
 
       const d =
         Math.ceil(
@@ -61,5 +63,7 @@ export default function useTaskForm(task, isOpen) {
     confirmDelete,
     setConfirmDelete,
     calculateEndDate,
+    dependencies,
+    setDependencies,
   };
 }
