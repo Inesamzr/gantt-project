@@ -1,9 +1,6 @@
-import { useEffect, useRef } from "react";
 import { typeColors } from "../../config/colors";
-import {
-  countWorkingDaysBetween,
-  getWorkingDays,
-} from "../../hooks/useWorkingDaysTaskRow";
+import { getWorkingDays } from "../../hooks/useWorkingDaysTaskRow";
+import { useTaskBarPosition } from "../../hooks/useTaskBarPosition";
 
 function TaskRowBar({
   task,
@@ -14,33 +11,27 @@ function TaskRowBar({
   registerPosition,
   refreshKey,
 }) {
-  const barRef = useRef(null);
   const workingDays = getWorkingDays(ganttStart, totalDays);
-  const offset = countWorkingDaysBetween(ganttStart, start);
-  const endOffset = countWorkingDaysBetween(ganttStart, end);
 
-  useEffect(() => {
-    if (!barRef.current) return;
-    const rect = barRef.current.getBoundingClientRect();
-    registerPosition(task.id, {
-      left: rect.left,
-      top: rect.top,
-      width: rect.width,
-      height: rect.height,
+  const { barRef, isVisible, visibleOffset, visibleDuration } =
+    useTaskBarPosition({
+      task,
+      ganttStart,
+      start,
+      end,
+      totalDays,
+      registerPosition,
+      refreshKey,
     });
-  }, [task.id, registerPosition, refreshKey]);
 
-  if (endOffset < 0 || offset > totalDays - 1) return null;
-
-  const visibleOffset = Math.max(0, offset);
-  const visibleDuration =
-    Math.min(endOffset, totalDays - 1) - visibleOffset + 1;
+  if (!isVisible) return null;
 
   return (
     <div
       className="relative grid gap-[4px]"
       style={{ gridTemplateColumns: `repeat(${totalDays}, 40px)` }}
     >
+      {/* Barre de la tâche */}
       <div
         ref={barRef}
         className="absolute h-5.5 top-[5px] flex items-center text-white text-xs font-semibold rounded-full px-2 overflow-hidden mx-[2px]"
@@ -55,6 +46,7 @@ function TaskRowBar({
         <span className="truncate whitespace-nowrap">{task.name}</span>
       </div>
 
+      {/* Colonnes de jours */}
       {workingDays.map((day, i) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
