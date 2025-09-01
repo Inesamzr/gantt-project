@@ -10,7 +10,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `40px ${LEFT_WIDTH}px repeat(${days.length}, 40px)`,
+          gridTemplateColumns: `36.5px ${LEFT_WIDTH}px repeat(${days.length}, 40px)`,
           gap: "4px",
         }}
       >
@@ -23,7 +23,7 @@ function TimeHeader({ startDate, endDate, onAddClick }) {
           style={{
             display: "grid",
             gridTemplateColumns: `${COLS.name}px ${COLS.assignee}px ${COLS.start}px ${COLS.duration}px ${COLS.actions}px`,
-            gap: "4px",
+            gap: "2px",
           }}
         >
           <div className="h-8 flex items-center px-2">Nom</div>
