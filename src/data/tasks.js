@@ -32,7 +32,7 @@ export const tasks = [
     name: "Analyse des besoins",
     type: "analyse",
     assignedTo: "ines",
-    start: "2025-08-16",
+    start: "2025-08-18",
     end: "2025-08-20",
     status: "terminée",
     children: [

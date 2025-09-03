@@ -9,8 +9,13 @@ export default function useTasks(showToast) {
   const [taskList, setTaskList] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    setTaskList(tasks);
+    const stored = localStorage.getItem("tasks");
+    if (stored) {
+      setTaskList(JSON.parse(stored));
+    } else {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      setTaskList(tasks);
+    }
   }, []);
 
   const handleAddOrUpdateTask = (newTask) => {
